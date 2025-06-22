@@ -18,3 +18,27 @@ export const asClass = <T extends (new (...args: any[]) => any)>(C: T): Configur
     },
     deps: getDependencies(C)
 })
+
+interface MakeableConstructor<Args extends Array<any>, R> {
+  new (...args: any[]): { make(...args: Args): R };
+}
+
+type MakeableConstructorReturn<T> = T extends MakeableConstructor<any, infer R> ? R : never
+
+export const asFactory = <const T extends MakeableConstructor<Array<any>, any>>(C: T): Configuration<MakeableConstructorReturn<T>> => ({
+    deps: getDependencies(C),
+    generator: (args: any[]) => {
+        return new C().make(...args)
+    }
+})
+
+export const asFunction = <T extends (...args: any[]) => any>(c: T): Configuration<ReturnType<T>> => {
+    const ret: any = ({
+        generator: (args: any[]) => {
+            return c(...args)
+        },
+        deps: getDependencies(c)
+    })
+
+    return ret as any as Configuration<ReturnType<T>>
+}

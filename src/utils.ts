@@ -1,4 +1,4 @@
-import { ContainerBuilderFunction, SubmodulesRec } from "./builder";
+import { ContainerBuilderFunction, ContainerBuilderWithUnresolvedExternals, SubmodulesRec } from "./builder";
 import { Dependencies } from "./container";
 import { GetContainerTypes } from "./injector";
 
@@ -27,10 +27,24 @@ type Prettify<T> = {
 
 type Strinfgify<K extends string | number | undefined | symbol> = K extends string ? `${K}` : ''
 
-type PrefixContainerKeys<Prefix extends string | number | undefined, C extends ContainerBuilderFunction> =
+type GetKeys<C extends ContainerBuilderFunction | ContainerBuilderWithUnresolvedExternals> = 
   C extends ContainerBuilderFunction<Dependencies, any, infer T> ?
-  { [K in keyof T as `${Strinfgify<Prefix>}.${Strinfgify<K>}`]: T[K] }
-  : never
+    T
+  : C extends ContainerBuilderWithUnresolvedExternals<Dependencies, any, infer T>
+    ? T : never
+
+  type GetExternals<C extends ContainerBuilderFunction | ContainerBuilderWithUnresolvedExternals> = 
+  C extends ContainerBuilderFunction<Dependencies, any, any, infer T> ?
+    T
+  : C extends ContainerBuilderWithUnresolvedExternals<Dependencies, any, any, infer T>
+    ? T : never
+
+type PrefixKeys<Prefix extends string, T> = {
+  [K in keyof T as `${Prefix}.${Strinfgify<K>}`]: T[K]
+}
+
+type PrefixContainerKeys<Prefix extends string | number | undefined, C extends ContainerBuilderFunction | ContainerBuilderWithUnresolvedExternals> =
+  PrefixKeys<Strinfgify<Prefix>, GetKeys<C>>
 
 type UnionToIntersection<U> = (
   U extends any ? (k: U) => void : never
@@ -40,4 +54,8 @@ type UnionToIntersection<U> = (
 
 export type SubModulesToKeys<S extends SubmodulesRec> = Prettify<UnionToIntersection<{
   [K in keyof S]: K extends string ? PrefixContainerKeys<K, S[K]> : never
+}[keyof S]>>
+
+export type SubModulesToExternalKeys<S extends SubmodulesRec> = Prettify<UnionToIntersection<{
+  [K in keyof S]: K extends string ? PrefixKeys<Strinfgify<K>, GetExternals<S[K]>> : never
 }[keyof S]>>
