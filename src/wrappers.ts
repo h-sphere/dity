@@ -32,6 +32,11 @@ export const asFactory = <const T extends MakeableConstructor<Array<any>, any>>(
     }
 })
 
+export const asValue = (v: string): Configuration<string> => ({
+    deps: [],
+    generator: () => v
+})
+
 export const asFunction = <T extends (...args: any[]) => any>(c: T): Configuration<ReturnType<T>> => {
     const ret: any = ({
         generator: (args: any[]) => {

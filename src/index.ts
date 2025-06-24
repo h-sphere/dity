@@ -1,7 +1,9 @@
-import { containerBuilder } from "./builder";
+import { buildContainer } from "./builder";
 import { makeInjector } from "./injector";
+import { asClass, asFactory, asValue } from './wrappers'
 
 export {
-    containerBuilder,
-    makeInjector
+    buildContainer,
+    makeInjector,
+    asClass, asFactory, asValue
 }

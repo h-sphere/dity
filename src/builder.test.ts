@@ -1,6 +1,6 @@
 import { buildContainer, ContainerBuilder } from "./builder"
 import { makeInjector } from "./injector"
-import { asClass, asFactory, asFunction } from "./wrappers"
+import { asClass, asFactory, asFunction, asValue } from "./wrappers"
 
 type A = {} extends { a: string } ? true : false
 
@@ -18,8 +18,8 @@ describe('Builder', () => {
             .submodules({ modA })
             .resolve('modA.c', 5)
             .resolve('modA.a', 'modA.c')
-            .resolve('d', 'hello world')
-            .resolve('modA.b', { ref: 'd' })
+            .resolve('d', asValue('hello world'))
+            .resolve('modA.b', 'd')
 
         const container = modB.build()
         expect(await container.get('modA.c')).toEqual(5)
@@ -74,7 +74,7 @@ describe('Builder', () => {
 
         const container = main
             .resolve('helper.a', 'helper.c')
-            .resolve('helper.b', { ref: 'helper.d' })
+            .resolve('helper.b', 'helper.d')
             .build()
 
         // FIXME: references should work.
@@ -100,12 +100,12 @@ describe('Builder', () => {
                 out: asClass(Ex3),
                 internal: 101
             })
-            .resolve('ext1', 'hello')
+            .resolve('ext1', asValue('hello'))
             .resolve('ext2', 5)
             .submodules({ submodule })
         )
 
-        const inject = makeInjector<typeof module>('')
+        const inject = makeInjector<typeof module>()
 
 
         @inject([
@@ -115,7 +115,6 @@ describe('Builder', () => {
         ])
         class Ex3 {
             constructor(private a: number, private b: number, private c: number) {
-                console.log('Ex3', a, b, c)
             }
             compute() {
                 return this.a + this.b + this.c
@@ -137,7 +136,7 @@ describe('Builder', () => {
             })
            )
 
-        const inject = makeInjector<typeof module & {}>('main')
+        const inject = makeInjector<typeof module & {}>()
 
         const inj = inject(['a', 'b'])
 
@@ -164,7 +163,7 @@ describe('Builder', () => {
             }>()
         )
 
-        const inject = makeInjector<typeof module>('main')
+        const inject = makeInjector<typeof module>()
 
         @inject([
             'a',
@@ -178,7 +177,10 @@ describe('Builder', () => {
             }
         }
 
-        const container = module.resolve('b', 999).resolve('c', 'external input').build()
+        const container = module
+            .resolve('b', 999)
+            .resolve('c', asValue('external input'))
+            .build()
         const val = await container.get('d')
         expect(val.get()).toEqual('1234 999 external input')
     })
@@ -194,7 +196,7 @@ describe('Builder', () => {
         })
         )
 
-        const inject = makeInjector<typeof submodule>('sub')
+        const inject = makeInjector<typeof submodule>()
 
         @inject([
             'dbUrl',
@@ -203,7 +205,6 @@ describe('Builder', () => {
         ])
         class Compute {
             make(url: string, retryTimes: number, logger: (message: string) => void) {
-                console.log('COMPUTE', url)
                 logger(`db url: ${url}. retries: ${retryTimes}`)
                 return retryTimes
             }
@@ -214,7 +215,7 @@ describe('Builder', () => {
         }))
 
         const c = module
-            .resolve('sub.dbUrl', 'production-url')
+            .resolve('sub.dbUrl', asValue('production-url'))
             .resolve('sub.logger', jest.fn((m: string) => console.log('HELLO')))
             .resolve('sub.retryTimes', 5)
             .build()

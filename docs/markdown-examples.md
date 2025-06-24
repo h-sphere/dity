@@ -9,21 +9,32 @@ VitePress provides Syntax Highlighting powered by [Shiki](https://github.com/shi
 **Input**
 
 ```ts twoslash
-import { containerBuilder } from './src/index'
+import { buildContainer } from './src/builder'
 
-const module = containerBuilder('main', c => c.register({
+const module = buildContainer(c => c.register({
   a: 5,
   b: 'hello world'
 }))
 
-const container = module()
+const container = module.build()
+
+// ℹ️ Container results are properly typed
 const a = await container.get('a')
 //    ^?
 
-const b = await container.get('a')
-//                             ^|
-```
 
+
+
+// Autocomplete shows all available keys
+const res = await container.get('b')
+//                               ^|
+
+
+
+
+ 
+```
+<!-- 
 ```ts twoslash
 import { containerBuilder } from './src/index'
 
@@ -45,4 +56,4 @@ const module = containerBuilder('main', c => c.register({
 const container = module()
 const a = await container.get('a')
 //                             ^|
-```
+``` -->
