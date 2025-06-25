@@ -1,0 +1,19 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docs": "vitepress dev",
+    "docs-build": "vitepress build",
+    "docs-serve": "vitepress serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "@shikijs/vitepress-twoslash": "^3.7.0",
+    "vitepress": "^1.6.3"
+  }
+}

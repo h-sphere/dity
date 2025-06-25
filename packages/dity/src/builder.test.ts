@@ -2,8 +2,6 @@ import { buildContainer, ContainerBuilder } from "./builder"
 import { makeInjector } from "./injector"
 import { asClass, asFactory, asFunction, asValue } from "./wrappers"
 
-type A = {} extends { a: string } ? true : false
-
 describe('Builder', () => {
     it('should properly resolve simple externals', async () => {
         const modA = new ContainerBuilder('').externals<{

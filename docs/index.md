@@ -8,18 +8,15 @@ hero:
   tagline: My great project tagline
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Get Started
+      link: /introduction
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Fully Typed
+    details: Resolve all your dependencies on the type level before runtime
+  - title: Inspect
+    details: You can easily visualise your dependencies
+  - title: Evolves with your team
+    details: As your team grows, <i>dity</i> helps with refactor rather than becoming a bottleneck
 ---
 

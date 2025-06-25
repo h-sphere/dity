@@ -1,0 +1,21 @@
+{
+  "name": "@dity/graph",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "dependencies": {
+    "@sigma/node-border": "^3.0.0",
+    "graphology": "^0.26.0",
+    "graphology-layout-forceatlas2": "^0.10.1",
+    "lodash": "^4.17.21",
+    "sigma": "^3.0.2",
+    "dity": "workspace:*"
+  }
+}
