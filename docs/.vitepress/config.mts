@@ -1,16 +1,14 @@
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "dity",
   description: "Dependency Injection. Typed.",
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Documentation', link: '/introduction' },
-      { text: 'Explorer', link: '/explorer' }
+      { text: 'Explorer', link: 'https://dity.dev/explorer/' }
     ],
 
     sidebar: [
