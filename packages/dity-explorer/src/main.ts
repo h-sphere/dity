@@ -10,8 +10,8 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 
 import dityTypes from 'dity/dist/index.d.ts?raw'
+import { handleHandle } from './handle';
 
-console.log('here are the types', dityTypes)
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -32,7 +32,7 @@ self.MonacoEnvironment = {
 };
 
 const codeContainer = document.querySelector<HTMLDivElement>('#code-container')!
-const container = document.querySelector<HTMLDivElement>('#graph-container')!
+const container = document.querySelector<HTMLDivElement>('#graph-container-element')!
 
 const code = `
 import { buildContainer } from "dity";
@@ -68,13 +68,14 @@ function resolveImports(code: string) {
 
 let graph: DityGraph | null = null
 
+const getGraph = () => {
+  return graph
+}
+
 const runCode = async function(code: string) {
-    console.log('CODE TO RUN', resolveImports(code))
     const jsCode = await compileTypeScript(resolveImports(code))
-    console.log('js', jsCode)
     const fn = new Function('dity', jsCode)
     const module = fn(Dity)
-    console.log(module)
     if (graph !== null) {
         graph.destroy()
     }
@@ -86,7 +87,6 @@ const runCode = async function(code: string) {
 // const graph = new DityGraph(main as any, container)
 // graph.render()
 
-// console.log(main.build().get('a'))
 
 
 
@@ -178,7 +178,6 @@ async function compileTypeScript(tsCode: string) {
   model.dispose();
   
   if (result.emitSkipped) {
-    console.log(result)
     throw new Error('TypeScript compilation failed');
   }
   
@@ -191,7 +190,7 @@ const editor = monaco.editor.create(codeContainer, {
     value: code,
     language: 'typescript',
     theme: 'vs-dark',
-    automaticLayout: true,
+    automaticLayout: false,
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
     fontSize: 14,
@@ -217,8 +216,18 @@ editor.addAction({
         monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter
     ],
     run:function() {
-        console.log('run code')
         // run code
         runCode(editor.getValue())
     }
 })
+
+runCode(editor.getValue())
+
+
+// HANDLER
+handleHandle(
+  document.querySelector<HTMLDivElement>('.app-content')!,
+  document.querySelector<HTMLDivElement>('.handle')!,
+  getGraph,
+  editor
+)

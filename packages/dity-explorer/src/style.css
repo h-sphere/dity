@@ -10,5 +10,36 @@ html, body {
     height: 100vh;
     background: #EEE;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto 1fr;
+}
+
+.sidebar {
+    background: black;
+    width: 50px;
+    overflow: hidden;
+}
+
+.handle {
+    background: #EEE;
+    cursor: ew-resize;
+}
+
+.handle:hover {
+    background: orange;
+}
+
+.app-content {
+    display: grid;
+    --ratio: 0.5;
+    grid-template-columns: calc(100% * var(--ratio) - 5px) 5px calc(100% * (1 - var(--ratio)));
+}
+
+#graph-container-element {
+    width: 100%;
+    height: 100%;
+}
+
+#code-container {
+    overflow: hidden;
+    background: #201E1E;
 }
