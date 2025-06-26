@@ -1,6 +1,6 @@
 import './style.css'
-import * as Dity from "dity";
-import { DityGraph } from 'dity-graph'
+import * as Dity from "@hypersphere/dity";
+import { DityGraph } from '@hypersphere/dity-graph'
 
 import * as monaco from 'monaco-editor';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -36,7 +36,7 @@ const codeContainer = document.querySelector<HTMLDivElement>('#code-container')!
 const container = document.querySelector<HTMLDivElement>('#graph-container-element')!
 
 const code = `
-import { buildContainer } from "dity";
+import { buildContainer } from "@hypersphere/dity";
 
 const helpers = buildContainer(c => c
     .register({
@@ -85,45 +85,6 @@ const runCode = async function(code: string) {
 
 }
 
-// const graph = new DityGraph(main as any, container)
-// graph.render()
-
-
-
-
-
-
-// monaco.languages.typescript.typescriptDefaults.addExtraLib(`
-// declare global {
-//     const r: LimnRenderer;
-// }
-
-// export {};
-// `, 'file:///globals.d.ts')
-
-
-
-// monaco.languages.registerCompletionItemProvider('typescript', {
-//   provideCompletionItems: () => {
-//     return {
-//       suggestions: [
-//         {
-//           label: 'Limn Circle',
-//           kind: monaco.languages.CompletionItemKind.Snippet,
-//           documentation: 'Add basic circle in the middle',
-//           insertText: `r.add(\${1:r.center}, {
-//     radius: \${2:20},
-//     color: '\${3:red}',
-// })`,
-// insertTextRules:
-// 				monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-//         }
-//       ]
-//     };
-//   }
-// } as any);
-
-
 // Configure TypeScript compiler options
 monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
   target: monaco.languages.typescript.ScriptTarget.ES2020,
@@ -150,18 +111,6 @@ monaco.languages.typescript.typescriptDefaults.addExtraLib(wrappedDeclaration,
 )
 
 let proxy: monaco.languages.typescript.TypeScriptWorker | null = null
-
-// async function compileTypeScript(tsCode: string) {
-//     const model = editor.getModel()
-//     console.log('GOT MODEL', model)
-//     if (!proxy) {
-//         const tsWorker = await monaco.languages.typescript.getTypeScriptWorker()
-//         proxy = await tsWorker(editor.getModel()!.uri)
-//     }
-//     const { outputFiles } = await proxy.getEmitOutput(editor.getModel()!.uri.toString())
-//     console.log('OUTPUT FILES', outputFiles)
-//     return outputFiles[0]
-// }
 
 async function compileTypeScript(tsCode: string) {
   // Create a model

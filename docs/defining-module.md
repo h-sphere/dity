@@ -5,7 +5,7 @@ You can define your module by using a builder. It allows to register constant va
 To define constants use `.register` method:
 
 ```ts twoslash
-import { buildContainer } from 'dity'
+import { buildContainer } from '@hypersphere/dity'
 
 const module = buildContainer(c => c.register({
   a: 5,
@@ -25,7 +25,7 @@ To define class dependency, you need to wrap it constructor class with `asClass`
 ## Succesful resolution
 
 ```ts twoslash
-import { buildContainer, makeInjector, asClass } from 'dity'
+import { buildContainer, makeInjector, asClass } from '@hypersphere/dity'
 
 const module = buildContainer(c => c.register({
   a: 5,
@@ -54,7 +54,7 @@ const a = await container.get('a')
 
 ```ts twoslash
 // @errors: 1238
-import { buildContainer, makeInjector, asClass } from 'dity'
+import { buildContainer, makeInjector, asClass } from '@hypersphere/dity'
 
 const module = buildContainer(c => c.register({
   a: 5,

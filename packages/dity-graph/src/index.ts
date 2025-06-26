@@ -1,4 +1,4 @@
-import { inspect, type ContainerBuilder } from 'dity'
+import { inspect, type ContainerBuilder } from '@hypersphere/dity'
 import { uniq } from 'lodash'
 import chroma from 'chroma-js'
 import Graph from 'graphology'

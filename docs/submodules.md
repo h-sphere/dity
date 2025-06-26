@@ -4,7 +4,7 @@
 ## Basic example
 
 ```ts twoslash
-import { buildContainer } from 'dity'
+import { buildContainer } from '@hypersphere/dity'
 
 const submodule = buildContainer(c => c.register({
     subA: 5,
@@ -32,7 +32,7 @@ By composing submodules we can create cross-module references by still keeping m
 
 ```ts twoslash
 // @errors: 7022 7024 2304 234
-import { buildContainer, makeInjector, asClass } from 'dity'
+import { buildContainer, makeInjector, asClass } from '@hypersphere/dity'
 
 const db = buildContainer(c => c.register({
     db: asClass(Db)

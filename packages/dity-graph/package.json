@@ -1,5 +1,5 @@
 {
-  "name": "dity-graph",
+  "name": "@hypersphere/dity-graph",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@sigma/node-border": "^3.0.0",
     "chroma-js": "^3.1.2",
-    "dity": "workspace:*",
+    "@hypersphere/dity": "workspace:*",
     "graphology": "^0.26.0",
     "graphology-layout": "^0.6.1",
     "graphology-layout-forceatlas2": "^0.10.1",

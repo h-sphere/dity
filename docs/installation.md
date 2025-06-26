@@ -2,7 +2,7 @@
 To install **dity**, add it to your dependencies:
 
 ```bash
-npm install dity
+npm install @hypersphere/dity
 ```
 
 It does NOT require any additional dependencies but it requires decorators to be enabled:

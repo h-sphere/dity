@@ -17,6 +17,6 @@
     "vitepress": "^1.6.3"
   },
   "dependencies": {
-    "dity": "workspace:*"
+    "@hypersphere/dity": "workspace:*"
   }
 }

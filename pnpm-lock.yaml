@@ -14,7 +14,7 @@ importers:
 
   docs:
     dependencies:
-      dity:
+      '@hypersphere/dity':
         specifier: workspace:*
         version: link:../packages/dity
     devDependencies:
@@ -58,12 +58,12 @@ importers:
 
   packages/dity-explorer:
     dependencies:
-      'dity-graph':
-        specifier: workspace:*
-        version: link:../dity-graph
-      dity:
+      '@hypersphere/dity':
         specifier: workspace:*
         version: link:../dity
+      '@hypersphere/dity-graph':
+        specifier: workspace:*
+        version: link:../dity-graph
       graphology-layout:
         specifier: ^0.6.1
         version: 0.6.1(graphology-types@0.24.8)
@@ -80,15 +80,15 @@ importers:
 
   packages/dity-graph:
     dependencies:
+      '@hypersphere/dity':
+        specifier: workspace:*
+        version: link:../dity
       '@sigma/node-border':
         specifier: ^3.0.0
         version: 3.0.0(sigma@3.0.2(graphology-types@0.24.8))
       chroma-js:
         specifier: ^3.1.2
         version: 3.1.2
-      dity:
-        specifier: workspace:*
-        version: link:../dity
       graphology:
         specifier: ^0.26.0
         version: 0.26.0(graphology-types@0.24.8)

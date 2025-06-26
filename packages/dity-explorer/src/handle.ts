@@ -1,4 +1,4 @@
-import { DityGraph } from "dity-graph";
+import { DityGraph } from "@hypersphere/dity-graph";
 import { editor } from 'monaco-editor';
 
 type Sigma = DityGraph['sigma']
