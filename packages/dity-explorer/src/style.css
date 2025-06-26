@@ -43,3 +43,28 @@ html, body {
     overflow: hidden;
     background: #201E1E;
 }
+
+.sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar li {
+    margin-top: 10px;
+}
+
+.sidebar button {
+    background: rgb(0 0 0 / 10%);
+    color: #FFF;
+    border: 0;
+    cursor: pointer;
+    width: 100%;
+}
+
+.sidebar button:hover {
+    background: rgb(255 255 255 / 20%);
+}

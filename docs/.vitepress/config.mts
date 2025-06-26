@@ -26,8 +26,8 @@ export default defineConfig({
       {
         text: 'Extensions',
         items: [
-          { text: 'Graph', link: '/graph' },
-          { text: 'Explorer', link: '/explorer' }
+          { text: 'Graph', link: '/extensions/graph' },
+          { text: 'Explorer', link: '/extensions/explorer' }
         ]
       }
     ],

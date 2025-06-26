@@ -6,6 +6,8 @@ import FA2Layout from "graphology-layout-forceatlas2/worker";
 import Sigma from 'sigma'
 import { NodeBorderProgram } from "@sigma/node-border";
 import forceAtlas2 from "graphology-layout-forceatlas2";
+import { animateNodes } from 'sigma/utils';
+import { circular } from "graphology-layout";
 
 
 const circleCoords = (i: number, radius: number = 150) => {
@@ -15,6 +17,8 @@ const circleCoords = (i: number, radius: number = 150) => {
     } as const
 }
 
+type Layout = 'circle' | 'forces'
+
 export class DityGraph {
     graph: Graph = new Graph()
     sigma: Sigma | null = null
@@ -23,6 +27,11 @@ export class DityGraph {
         private htmlContainer: HTMLElement
     ) {
     }
+
+    currentLayout: Layout = 'forces'
+
+    fa2Layout: FA2Layout | null = null
+    deps: ReturnType<ReturnType<typeof inspect>['getDependencies']> | null = null
 
     render() {
         const container = this.containerBuilder.build({} as never)
@@ -52,6 +61,7 @@ export class DityGraph {
 
         const M = modules.length
         const N = modules.length + deps.length
+        this.deps = deps
         deps.forEach((dep, i) => {
             let colors: Record<string, any> = {
                 color: moduleColor(dep.module)
@@ -96,14 +106,49 @@ export class DityGraph {
         // Forces
 
         const sensibleSettings = forceAtlas2.inferSettings(this.graph);
-        const fa2Layout = new FA2Layout(this.graph, {
-            settings: sensibleSettings,
+        this.fa2Layout = new FA2Layout(this.graph, {
+            settings: {
+                ...sensibleSettings,
+                slowDown: 5
+            },
+            
         });
-        fa2Layout.start()
+        this.fa2Layout.start()
         this.sigma = new Sigma(this.graph, this.htmlContainer, {
           nodeProgramClasses: {
             border: NodeBorderProgram,
           }
+        })
+    }
+
+    setLayout(layout: 'circle' | 'forces') {
+        if (this.currentLayout === layout) {
+            return
+        }
+
+        if (layout === 'circle') {
+            this.fa2Layout?.stop()
+            // const circularPositions = circular(this.graph, { scale: 100 });
+            const circularPositions = this.deps!.reduce((acc,d,i) => {
+                return {
+                    ...acc,
+                    [d.key]: circleCoords(i/this.deps!.length)
+                }
+            }, {})
+            console.log('new positions', circularPositions)
+            animateNodes(this.graph, circularPositions, { duration: 200 })
+        } else {
+            this.fa2Layout?.start()
+        }
+        this.currentLayout = layout
+    }
+
+    showModules(show: boolean) {
+            this.graph.nodes().forEach(node => {
+            console.log('NODE', node)
+            if (node.startsWith('MODULE___')) {
+                this.graph.setNodeAttribute(node, 'hidden', !show)
+            }
         })
     }
 

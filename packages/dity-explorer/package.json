@@ -23,6 +23,7 @@
   "dependencies": {
     "@dity/graph": "workspace:*",
     "dity": "workspace:*",
+    "graphology-layout": "^0.6.1",
     "monaco-editor": "^0.52.2"
   }
 }

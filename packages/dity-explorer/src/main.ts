@@ -11,6 +11,7 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 
 import dityTypes from 'dity/dist/index.d.ts?raw'
 import { handleHandle } from './handle';
+import { sidebar } from './sidebar';
 
 
 self.MonacoEnvironment = {
@@ -231,3 +232,5 @@ handleHandle(
   getGraph,
   editor
 )
+
+sidebar(document.querySelector<HTMLDivElement>('.sidebar')!, getGraph)
