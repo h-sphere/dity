@@ -5,7 +5,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      name: '@dity/graph',
+      name: 'dity-graph',
       fileName: (format) => `dity.${format}.js`
     },
     rollupOptions: {

@@ -1,4 +1,4 @@
-import { DityGraph } from "@dity/graph"
+import { DityGraph } from "dity-graph"
 
 export const sidebar = (el: HTMLDivElement, graph: () => DityGraph | null)=> {
     const list = document.createElement('ul')

@@ -1,6 +1,6 @@
 import './style.css'
 import * as Dity from "dity";
-import { DityGraph } from '@dity/graph'
+import { DityGraph } from 'dity-graph'
 
 import * as monaco from 'monaco-editor';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';

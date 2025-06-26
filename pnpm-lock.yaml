@@ -58,7 +58,7 @@ importers:
 
   packages/dity-explorer:
     dependencies:
-      '@dity/graph':
+      'dity-graph':
         specifier: workspace:*
         version: link:../dity-graph
       dity:

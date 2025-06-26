@@ -1,5 +1,5 @@
 {
-  "name": "@dity/graph",
+  "name": "dity-graph",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -17,7 +17,6 @@
   ],
   "author": "hypersphere",
   "license": "MIT",
-  "private": true,
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
     "@sigma/node-border": "^3.0.0",
