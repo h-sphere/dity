@@ -19,10 +19,14 @@
     "ci:publish": "pnpm publish -r",
     "ci:build-docs": "./build-docs.sh"
   },
-  "keywords": ["dependency injection", "di", "typescript"],
+  "keywords": [
+    "dependency injection",
+    "di",
+    "typescript"
+  ],
   "author": "hypersphere",
   "license": "MIT",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.12.3",
   "devDependencies": {
     "@changesets/cli": "^2.29.5"
   }
