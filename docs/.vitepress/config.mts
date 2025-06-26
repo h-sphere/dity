@@ -4,13 +4,15 @@ import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 export default defineConfig({
   title: "dity",
   description: "Dependency Injection. Typed.",
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Documentation', link: '/introduction' },
       { text: 'Explorer', link: 'https://dity.dev/explorer/' }
     ],
-
+    logo: '/dity.svg',
+    siteTitle: '',
     sidebar: [
       {
         text: 'Introduction',
