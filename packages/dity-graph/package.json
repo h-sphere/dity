@@ -2,20 +2,30 @@
   "name": "@dity/graph",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/dity.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["dependency injection", "di", "typescript", "visualisation", "dependency graph"],
+  "author": "hypersphere",
+  "license": "MIT",
+  "private": true,
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
     "@sigma/node-border": "^3.0.0",
+    "chroma-js": "^3.1.2",
+    "dity": "workspace:*",
     "graphology": "^0.26.0",
     "graphology-layout-forceatlas2": "^0.10.1",
     "lodash": "^4.17.21",
-    "sigma": "^3.0.2",
-    "dity": "workspace:*"
+    "sigma": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/chroma-js": "^3.1.1",
+    "@types/lodash": "^4.17.18",
+    "vite": "^7.0.0",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

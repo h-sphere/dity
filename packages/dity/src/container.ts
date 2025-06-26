@@ -73,7 +73,7 @@ export class Container<D extends Dependencies> {
 
     private async getDependencyInstance<const K extends keyof D & string>(key: K, parentChain: Container<any>[]): Promise<D[K]> {
         if (this.#dependencies.has(key)) {
-            return this.#dependencies.get(key)!
+            return this.#dependencies.get(key)! as D[K]
         }
         if (key in this.#dependencyDefinitions) {
             const dep = this.#dependencyDefinitions[key]

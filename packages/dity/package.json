@@ -2,28 +2,36 @@
   "name": "dity",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/dity.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "build": "vite build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "dependency injection",
+    "di",
+    "typescript"
+  ],
+  "author": "hypersphere",
+  "license": "MIT",
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
-    "typescript": "^5.8.3"
+    "esbuild": "^0.25.5",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-typescript": "^7.27.1",
+    "@microsoft/api-extractor": "^7.52.8",
     "@shikijs/vitepress-twoslash": "^3.7.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.0.1",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
+    "unplugin-dts": "1.0.0-beta.0",
     "vitepress": "^1.6.3"
   }
 }

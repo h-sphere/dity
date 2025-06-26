@@ -15,5 +15,8 @@
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^3.7.0",
     "vitepress": "^1.6.3"
+  },
+  "dependencies": {
+    "dity": "workspace:*"
   }
 }

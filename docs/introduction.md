@@ -14,7 +14,7 @@ The `@dity/graph` helps with visualising the structure easily.
 Here's a simple example how to get started with basic dependency injection. Note that all keys in `.get` method are fully typed. The resulting value is also automatically resolved.
 
 ```ts twoslash
-import { buildContainer } from './src/builder'
+import { buildContainer } from 'dity'
 
 const module = buildContainer(c => c.register({
   a: 5,

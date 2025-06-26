@@ -1,0 +1,28 @@
+{
+  "name": "dity-explorer",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "keywords": [
+    "dependency injection",
+    "di",
+    "typescript"
+  ],
+  "author": "hypersphere",
+  "license": "MIT",
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "vite": "^7.0.0",
+    "vite-plugin-monaco-editor": "^1.1.0"
+  },
+  "dependencies": {
+    "@dity/graph": "workspace:*",
+    "dity": "workspace:*",
+    "monaco-editor": "^0.52.2"
+  }
+}
