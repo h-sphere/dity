@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "dity"
   text: "Dependency Injection. Typed."
-  tagline: My great project tagline
+  tagline: use dependency injection without compromising on quality of your tooling
   actions:
     - theme: brand
       text: Get Started
