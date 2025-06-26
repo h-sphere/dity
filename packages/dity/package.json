@@ -29,5 +29,8 @@
     "ts-node": "^10.9.2",
     "unplugin-dts": "1.0.0-beta.0",
     "vitepress": "^1.6.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
