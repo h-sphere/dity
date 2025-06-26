@@ -1,6 +1,6 @@
 {
   "name": "@hypersphere/dity",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "type": "module",
   "main": "dist/dity.es.js",
@@ -21,6 +21,11 @@
     "typescript": "^5.8.3",
     "vite": "^7.0.0"
   },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^3.7.0",
     "@types/jest": "^30.0.0",

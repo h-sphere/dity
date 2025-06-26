@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      name: 'dity',
+      name: '@hypersphere/dity',
       fileName: (format) => `dity.${format}.js`
     },
     // rollupOptions: {

@@ -15,6 +15,11 @@
     "visualisation",
     "dependency graph"
   ],
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "author": "hypersphere",
   "license": "MIT",
   "packageManager": "pnpm@10.10.0",

@@ -11,6 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "private": true,
   "packageManager": "pnpm@10.10.0",
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^3.7.0",
