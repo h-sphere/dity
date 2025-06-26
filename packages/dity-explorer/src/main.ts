@@ -9,7 +9,7 @@ import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 
-import dityTypes from 'dity/dist/index.d.ts?raw'
+import dityTypes from '@hypersphere/dity/dist/index.d.ts?raw'
 import { handleHandle } from './handle';
 import { sidebar } from './sidebar';
 
