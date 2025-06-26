@@ -1,4 +1,6 @@
-# DITy
+# dity
+![Dity Logo](./docs/public/dity.svg)
+
 **D**ependency **I**njection. **Ty**ped.
 
 ## Motivation
