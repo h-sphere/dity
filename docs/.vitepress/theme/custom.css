@@ -1,3 +1,10 @@
 :root {
     --vp-nav-logo-height: 48px;
 }
+
+.VPHomeHero .heading .name {
+    background: url('/dity.svg');
+    background-size: cover;
+    color: rgb(255 255 255 / 0%);
+    -webkit-text-fill-color: transparent;
+}
