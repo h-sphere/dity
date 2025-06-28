@@ -19,7 +19,6 @@ export const handleHandle = (container: HTMLElement, handle: HTMLDivElement, gra
     handle.addEventListener('mousedown', (e) => {
         e.preventDefault()
         isResizing = true;
-        console.log('TURNING OFF RESCALING', graph()?.sigma)
         graph()?.sigma?.setSetting('allowInvalidContainer', true)
         editor.updateOptions({
             automaticLayout: false

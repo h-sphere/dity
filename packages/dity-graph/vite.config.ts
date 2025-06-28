@@ -9,10 +9,10 @@ export default defineConfig({
       fileName: (format) => `dity.${format}.js`
     },
     rollupOptions: {
-      external: ['dity', 'lodash', 'chroma-js', 'graphology', 'graphology-layout-forceatlas2', 'sigma', '@sigma/node-border'],
+      external: ['@hypersphere/dity', 'lodash', 'chroma-js', 'graphology', 'graphology-layout-forceatlas2', 'sigma', '@sigma/node-border'],
       output: {
         globals: {
-          'dity': 'dity',
+          '@hypersphere/dity': 'dity',
           lodash: 'lodash',
           'chroma-js': 'chroma',
           'graphology': 'Graph',

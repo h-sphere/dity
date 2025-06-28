@@ -23,7 +23,7 @@ export class DityGraph {
     graph: Graph = new Graph()
     sigma: Sigma | null = null
     constructor(
-        private containerBuilder: ContainerBuilder<any, never>,
+        private containerBuilder: ContainerBuilder<any, Record<never, any>>,
         private htmlContainer: HTMLElement
     ) {
     }
@@ -34,7 +34,7 @@ export class DityGraph {
     deps: ReturnType<ReturnType<typeof inspect>['getDependencies']> | null = null
 
     render() {
-        const container = this.containerBuilder.build({} as never)
+        const container = this.containerBuilder.build()
         const deps = inspect(container).getDependencies()
         const modules = uniq(deps.map(d => d.module))
         const colorScale = chroma.scale('Spectral').colors(modules.length)
@@ -135,7 +135,6 @@ export class DityGraph {
                     [d.key]: circleCoords(i/this.deps!.length)
                 }
             }, {})
-            console.log('new positions', circularPositions)
             animateNodes(this.graph, circularPositions, { duration: 200 })
         } else {
             this.fa2Layout?.start()
@@ -145,7 +144,6 @@ export class DityGraph {
 
     showModules(show: boolean) {
             this.graph.nodes().forEach(node => {
-            console.log('NODE', node)
             if (node.startsWith('MODULE___')) {
                 this.graph.setNodeAttribute(node, 'hidden', !show)
             }

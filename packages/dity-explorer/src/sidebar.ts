@@ -10,7 +10,6 @@ export const sidebar = (el: HTMLDivElement, graph: () => DityGraph | null)=> {
             name: 'Layout',
             value: false,
             fn: (v: boolean) => {
-                console.log('SETTING NEW ', v)
                 graph()?.setLayout(v ? 'circle' : 'forces')
             }
         },

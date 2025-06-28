@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "pnpm run dity-build && pnpm run dity-graph-build",
-    "explorer-dev": "cd packages/dity-explorer && pnpm run dev",
+    "explorer:dev": "cd packages/dity-explorer && pnpm run dev",
     "dity-build": "cd packages/dity && pnpm build && cd ..",
     "dity-graph-build": "cd packages/dity-graph && pnpm build && cd ..",
     "dity-explorer-build": "cd packages/dity-explorer && pnpm build && cd ..",

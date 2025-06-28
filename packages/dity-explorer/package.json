@@ -16,7 +16,7 @@
   ],
   "author": "hypersphere",
   "license": "MIT",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.12.3",
   "devDependencies": {
     "vite": "^7.0.0",
     "vite-plugin-monaco-editor": "^1.1.0"
