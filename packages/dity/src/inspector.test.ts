@@ -22,9 +22,11 @@ describe('Inspector', () => {
             a: 5,
             b: 'hello'
         }).externals<{ c: string }>().submodules({ sub }))
-            .resolve('c', 'b')
-            .resolve('sub.a', 'a')
-            .resolve('sub.b', 'sub.a')
+            .resolve({
+                'c': 'b',
+                'sub.a': 'a',
+                'sub.b': 'sub.a'
+            })
 
         const inspector = inspect(module.build())
         const res = inspector.getDependencies()

@@ -18,8 +18,6 @@ export const setupTypescript = () => {
     })
     
     
-    let proxy: monaco.languages.typescript.TypeScriptWorker | null = null
-    
     return async function compileTypeScript(tsCode: string) {
       // Create a model
       const uri = monaco.Uri.parse('file:///main.ts');

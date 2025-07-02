@@ -43,6 +43,23 @@ type ResolveConfigs<T> = { [K in keyof T]: T[K] extends Configuration<infer C> ?
 
 export const setSymbol = Symbol('setSymbol')
 
+type AtLeastOne<T, Main extends Record<string, any>> = {
+  [K in keyof T]: { [A in K]:
+    Exclude<WithType<T, T[K]>, K>
+    | (string extends T[K] ? Configuration<T[K]> : T[K])
+    | WithType<Main, T[K]> // Pick<T, K> | WithType<T, T[K]> //& Partial<Omit<T, K>>
+  }
+}[keyof T];
+
+type ALO = AtLeastOne<{ a: number, b: number}, { c: number }>
+
+// const x = {
+//     a:
+// } satisfies ALO
+
+
+type DepDep<Unresolved extends DependenciesObjectType, K extends keyof Unresolved> = Record<K, any>
+
 export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, Unresolved extends DependenciesObjectType = {}> {
     #dependencies = {}
     #submodules = {}
@@ -79,15 +96,31 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
 
     get<const K extends keyof Dependencies>(k: K) { }
 
-    resolve<const K extends keyof Unresolved, const J extends Unresolved[K]>(k: K, v: WithType<Dependencies, J> | (string extends Unresolved[K] ? Configuration<Unresolved[K]> : Unresolved[K]) ): ContainerBuilder<Prettify<Dependencies & { [k in K]: Unresolved[K] }>, Prettify<Omit<Unresolved, K>>> {
+    resolve<const T extends AtLeastOne<Unresolved, Dependencies>, const K extends keyof T & keyof Unresolved>(resolves: T): ContainerBuilder<Prettify<Dependencies & Pick<Unresolved, K>>, Prettify<Omit<Unresolved, K>>> {
         const c = this.copy()
+        const newDeps = Object.fromEntries(
+            Object.entries(resolves)
+            .map(([key, v]) => ([key, typeof v === 'string' ? { ref: v} : v]))
+        )
+
+        console.log('newdeps', newDeps)
+
         c.#dependencies = {
             ...c.#dependencies,
-            [k]: typeof v === 'string' ? { ref: v } : v
+            ...newDeps
         }
-        // FIXME: adding resolutions here.
         return c as any
     }
+
+    // resolve<const K extends keyof Unresolved, const J extends Unresolved[K]>(k: K, v: WithType<Dependencies, J> | (string extends Unresolved[K] ? Configuration<Unresolved[K]> : Unresolved[K]) ): ContainerBuilder<Prettify<Dependencies & { [k in K]: Unresolved[K] }>, Prettify<Omit<Unresolved, K>>> {
+    //     const c = this.copy()
+    //     c.#dependencies = {
+    //         ...c.#dependencies,
+    //         [k]: typeof v === 'string' ? { ref: v } : v
+    //     }
+    //     // FIXME: adding resolutions here.
+    //     return c as any
+    // }
 
     #symbolToSet = Symbol();
     // FIXME: this should be symbol itself
@@ -119,8 +152,8 @@ class ContainerBuilderResolver<Dependencies extends DependenciesObjectType, Unre
         return this.fn(new ContainerBuilder('')).build(...args)
     }
 
-    resolve<const K extends keyof Unresolved, const J extends Unresolved[K]>(k: K, v: WithType<Dependencies, J> | (string extends Unresolved[K] ? Configuration<Unresolved[K]> : Unresolved[K])) {
-        return new ContainerBuilderResolver((c: ContainerBuilder) => this.fn(c).resolve(k, v))
+    resolve<const T extends AtLeastOne<Unresolved, Dependencies>>(resolves: T) {
+        return new ContainerBuilderResolver((c: ContainerBuilder) => this.fn(c).resolve(resolves))
     }
     [setSymbol](name: symbol) {
         return new ContainerBuilderResolver((c: ContainerBuilder) => this.fn(c)[setSymbol](name))

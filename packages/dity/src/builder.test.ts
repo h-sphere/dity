@@ -14,10 +14,12 @@ describe('Builder', () => {
             d: string
         }>()
             .submodules({ modA })
-            .resolve('modA.c', 5)
-            .resolve('modA.a', 'modA.c')
-            .resolve('d', asValue('hello world'))
-            .resolve('modA.b', 'd')
+            .resolve({
+                'modA.c': 5,
+                'modA.a': 'modA.c',
+                d: asValue('hello world'),
+                'modA.b': 'd'
+            })
 
         const container = modB.build()
         expect(await container.get('modA.c')).toEqual(5)
@@ -43,12 +45,14 @@ describe('Builder', () => {
             .externals<{
                 backUp: number
             }>()
-            .resolve('modA.a', 'b')
-            .resolve('modA.b', 'modA.a')
-            .resolve('modA.c', 'modA.b')
-            .resolve('backUp', 'modA.c')
-            .resolve('modA.e', 'backUp')
-            .resolve('modA.f', 'modA.e')
+            .resolve({
+                'modA.a': 'b',
+                'modA.b': 'modA.a',
+                'modA.c': 'modA.b',
+                'backUp': 'modA.c',
+                'modA.e': 'backUp',
+                'modA.f': 'modA.e'
+            })
 
         const container = modB.build()
 
@@ -71,8 +75,10 @@ describe('Builder', () => {
         }))
 
         const container = main
-            .resolve('helper.a', 'helper.c')
-            .resolve('helper.b', 'helper.d')
+            .resolve({
+                'helper.a': 'helper.c',
+                'helper.b': 'helper.d'
+            })
             .build()
 
         // FIXME: references should work.
@@ -98,8 +104,10 @@ describe('Builder', () => {
                 out: asClass(Ex3),
                 internal: 101
             })
-            .resolve('ext1', asValue('hello'))
-            .resolve('ext2', 5)
+            .resolve({
+                'ext1': asValue('hello'),
+                'ext2': 5
+            })
             .submodules({ submodule })
         )
 
@@ -132,7 +140,7 @@ describe('Builder', () => {
                 b: 'dsadsada',
                 c: asFunction(fn)
             })
-           )
+        )
 
         const inject = makeInjector<typeof module & {}>()
 
@@ -169,15 +177,17 @@ describe('Builder', () => {
             'c'
         ])
         class Run {
-            constructor(private a: number, private b: number, private c: string) {}
+            constructor(private a: number, private b: number, private c: string) { }
             get() {
                 return `${this.a} ${this.b} ${this.c}`
             }
         }
 
         const container = module
-            .resolve('b', 999)
-            .resolve('c', asValue('external input'))
+            .resolve({
+                b: 999,
+                c: asValue('external input')
+            })
             .build()
         const val = await container.get('d')
         expect(val.get()).toEqual('1234 999 external input')
@@ -189,9 +199,9 @@ describe('Builder', () => {
             retryTimes: number,
             logger: (message: string) => void
         }>()
-        .register({
-            compute: asFactory(Compute)
-        })
+            .register({
+                compute: asFactory(Compute)
+            })
         )
 
         const inject = makeInjector<typeof submodule>()
@@ -213,9 +223,11 @@ describe('Builder', () => {
         }))
 
         const c = module
-            .resolve('sub.dbUrl', asValue('production-url'))
-            .resolve('sub.logger', jest.fn((m: string) => console.log('HELLO')))
-            .resolve('sub.retryTimes', 5)
+            .resolve({
+                'sub.dbUrl': asValue('production-url'),
+                'sub.logger': jest.fn((m: string) => console.log('HELLO')),
+                'sub.retryTimes': 5
+            })
             .build()
 
         const compute = await c.get('sub.compute')
@@ -238,10 +250,32 @@ describe('Builder', () => {
         }).submodules({
             helper: helper
         }))
-        .resolve('helper.c', 'niceNumber')
-        
+            .resolve({
+                'helper.c': 'niceNumber'
+            })
+
         const container = main.build()
 
         expect(await container.get('helper.c')).toEqual(42)
+    })
+
+    it('should properly provide object to resolve', async () => {
+        const main = buildContainer(c => c
+            .register({
+                stringVal: 'dsada',
+                numVal: 34234324
+            })
+            .externals<{ a: number, b: string }>()
+            .resolve({
+                a: 'numVal',
+            })
+            .resolve({
+                'b': 'stringVal',
+            })
+        )
+
+        const container = main.build()
+        expect(await container.get('a')).toEqual(34234324)
+        expect(await container.get('b')).toEqual('dsada')
     })
 })

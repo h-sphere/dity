@@ -49,7 +49,7 @@ describe('Container', () => {
         const mainMod = buildContainer(c => c.submodules({ helper: helperMod }).register({ a: 5, b: 7, init: asClass(Init) }))
 
         const inject = makeInjector<typeof mainMod>();
-        
+
         @inject([
             'helper.date',
             'helper.env'
@@ -79,7 +79,7 @@ describe('Container', () => {
             helperA: 5,
             helperB: 10,
             helperC: asClass(HelperC)
-        }).externals<{ tA: number, tB: number}>())
+        }).externals<{ tA: number, tB: number }>())
 
         const helperInjector = makeInjector<typeof helperModule>()
 
@@ -109,7 +109,12 @@ describe('Container', () => {
             }
         }
 
-        const container = mainModule.resolve('helper.tA', 'timer.timerA').resolve('helper.tB', 'timer.timerB').build()
+        const container = mainModule
+            .resolve({
+                'helper.tA': 'timer.timerA',
+                'helper.tB': 'timer.timerB'
+            })
+            .build()
         const helperC = await container.get('helper.helperC')
         expect(helperC.timerA).toEqual(100)
         expect(helperC.timerB).toEqual(2000)
@@ -119,7 +124,7 @@ describe('Container', () => {
 
     it('should resolve multiple nested modules', async () => {
         const e = buildContainer(c => c.register({ abc: 'abc result' }))
-        const f = buildContainer(c => c.register({ def: 443234}).submodules({ e }))
+        const f = buildContainer(c => c.register({ def: 443234 }).submodules({ e }))
 
         const a = buildContainer((c => c.register({ k1: 5, k2: 10, k3: 11, extras: asClass(AExtras) }).externals<{ ext: string }>()))
         const b = buildContainer((c => c.register({ k1: 10, k2: 15, k3: 100 }).submodules({ a })))
@@ -137,7 +142,11 @@ describe('Container', () => {
             constructor(public k: number, public b: string) { }
         }
 
-        const container = d.resolve('c.b.a.ext', 'c.f.e.abc').build()
+        const container = d
+            .resolve({
+                'c.b.a.ext': 'c.f.e.abc'
+            })
+            .build()
         const k3 = await container.get('c.b.a.k3')
         expect(k3).toEqual(11)
 
