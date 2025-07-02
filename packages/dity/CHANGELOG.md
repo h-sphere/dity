@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.0.5
+
+### Patch Changes
+
+- 748f5dd: reworked resolve to accept object of dependencies for better typing experience
+
 ## 0.0.4
 
 ### Patch Changes
