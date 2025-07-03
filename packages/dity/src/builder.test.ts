@@ -278,4 +278,24 @@ describe('Builder', () => {
         expect(await container.get('a')).toEqual(34234324)
         expect(await container.get('b')).toEqual('dsada')
     })
+
+    // it('should fail when providing wrong keys', async () => {
+
+    //     const second = buildContainer(c => c.externals<{a: number, b: number}>())
+    //     const main = buildContainer(c => c
+    //         .externals<{a: number, b: number}>()
+    //         .resolve({
+    //             a: 5,
+    //             b: 432,
+    //         })
+    //         .submodules({ second })
+    //         .resolve({
+    //             'second.a': 3243
+    //         })
+    //     )
+
+    //     const c = main.build({
+    //         'second.b': 42,
+    //     })
+    // })
 })

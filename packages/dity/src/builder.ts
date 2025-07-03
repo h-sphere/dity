@@ -35,30 +35,18 @@ type WithType<Dict, Type> = {
     [K in keyof Dict]: Type extends Dict[K] ? K : never
 }[keyof Dict]
 
-const TypeWrap = { reference: '' }
-
 type Res<T> = ({} extends T ? [] : [T])
 
 type ResolveConfigs<T> = { [K in keyof T]: T[K] extends Configuration<infer C> ? C : T[K] }
 
 export const setSymbol = Symbol('setSymbol')
 
-type AtLeastOne<T, Main extends Record<string, any>> = {
-  [K in keyof T]: { [A in K]:
-    Exclude<WithType<T, T[K]>, K>
-    | (string extends T[K] ? Configuration<T[K]> : T[K])
-    | WithType<Main, T[K]> // Pick<T, K> | WithType<T, T[K]> //& Partial<Omit<T, K>>
-  }
-}[keyof T];
-
-type ALO = AtLeastOne<{ a: number, b: number}, { c: number }>
-
-// const x = {
-//     a:
-// } satisfies ALO
-
-
-type DepDep<Unresolved extends DependenciesObjectType, K extends keyof Unresolved> = Record<K, any>
+type ResolveObject<T, K extends keyof T, Main> = {
+    [P in K]: 
+        Exclude<WithType<T, T[P]>, P>
+        | (string extends T[P] ? Configuration<T[P]> : T[P])
+        | WithType<Main, T[K]>
+}
 
 export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, Unresolved extends DependenciesObjectType = {}> {
     #dependencies = {}
@@ -96,7 +84,8 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
 
     get<const K extends keyof Dependencies>(k: K) { }
 
-    resolve<const T extends AtLeastOne<Unresolved, Dependencies>, const K extends keyof T & keyof Unresolved>(resolves: T): ContainerBuilder<Prettify<Dependencies & Pick<Unresolved, K>>, Prettify<Omit<Unresolved, K>>> {
+    resolve<const T extends keyof Unresolved>(resolves: ResolveObject<Unresolved, T, Dependencies>): ContainerBuilder<Prettify<Dependencies & Pick<Unresolved, T>>, Prettify<Omit<Unresolved, T>>>  {
+
         const c = this.copy()
         const newDeps = Object.fromEntries(
             Object.entries(resolves)
@@ -142,8 +131,6 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
     }
 }
 
-// export type ContainerBuilderResolver<Dependencies extends DependenciesObjectType, Unresolved extends DependenciesObjectType> = Pick<ContainerBuilder<Dependencies, Unresolved>, 'build'> & { resolve<const K extends keyof Unresolved, const J extends Unresolved[K]>(k: K, v: Unresolved[K] | WithTypeUnlessString<Dependencies, J>): ContainerBuilderResolver<Prettify<Dependencies & { [k in K]: Unresolved[K] }>, Prettify<Omit<Unresolved, K>>>}
-
 class ContainerBuilderResolver<Dependencies extends DependenciesObjectType, Unresolved extends DependenciesObjectType> {
     constructor(private readonly fn: ContainerBuilderWrapperFunction<Dependencies, Unresolved>) { }
 
@@ -152,7 +139,7 @@ class ContainerBuilderResolver<Dependencies extends DependenciesObjectType, Unre
         return this.fn(new ContainerBuilder('')).build(...args)
     }
 
-    resolve<const T extends AtLeastOne<Unresolved, Dependencies>>(resolves: T) {
+    resolve<const T extends keyof Unresolved>(resolves: ResolveObject<Unresolved, T, Dependencies>) {
         return new ContainerBuilderResolver((c: ContainerBuilder) => this.fn(c).resolve(resolves))
     }
     [setSymbol](name: symbol) {
