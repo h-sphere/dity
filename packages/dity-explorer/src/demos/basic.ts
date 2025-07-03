@@ -12,6 +12,10 @@ return buildContainer(c => c
     .register({
         a: 55,
         b: 'hello'
-    }).submodules({ helpers }).externals<{ c: number}>().resolve('c', 'helpers.h2')
-
+    })
+    .submodules({ helpers })
+    .externals<{ c: number}>()
+    .resolve({
+        'c': 'helpers.h2'
+    })
 )

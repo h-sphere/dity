@@ -59,8 +59,10 @@ const config = buildContainer(c => c.register({
 const module = buildContainer(c => c.register({
   /** our main module deps */
 }).submodules({ db, config }))
-.resolve('db.dbUrl', 'config.dbUrl')
-.resolve('db.env', 'config.env')
+.resolve({
+    'db.dbUrl': 'config.dbUrl',
+    'db.env': 'config.env'
+})
 
 const container = module.build()
 
