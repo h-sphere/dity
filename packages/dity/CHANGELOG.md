@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.0.6
+
+### Patch Changes
+
+- b4504cd: resolve now correctly corrects types
+
 ## 0.0.5
 
 ### Patch Changes
