@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.0.7
+
+### Patch Changes
+
+- b190d29: better resolution for async factories, factory and class injectors are now separated due to typing issue
+
 ## 0.0.6
 
 ### Patch Changes
