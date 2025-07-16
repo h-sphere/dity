@@ -133,29 +133,29 @@ describe('Builder', () => {
         expect(val.compute()).toEqual(111)
     })
 
-    it('should define function dependency', async () => {
-        const module = buildContainer(c => c.
-            register({
-                a: 42432,
-                b: 'dsadsada',
-                c: asFunction(fn)
-            })
-        )
+    // it('should define function dependency', async () => {
+    //     const module = buildContainer(c => c.
+    //         register({
+    //             a: 42432,
+    //             b: 'dsadsada',
+    //             c: asFunction(fn)
+    //         })
+    //     )
 
-        const inject = makeInjector<typeof module & {}>()
+    //     const inject = makeInjector<typeof module & {}>()
 
-        const inj = inject(['a', 'b'])
+    //     const inj = inject(['a', 'b'])
 
-        const fn = inj((a: number, b: string) => {
-            return a + ' ' + b
-        }) as ((a: number, b: string) => string) // This is the best we can do for now I think
+    //     const fn = inj((a: number, b: string) => {
+    //         return a + ' ' + b
+    //     }) as ((a: number, b: string) => string) // This is the best we can do for now I think
 
-        const c = module.build()
+    //     const c = module.build()
 
-        const res = await c.get('c')
-        expect(res).toEqual('42432 dsadsada')
+    //     const res = await c.get('c')
+    //     expect(res).toEqual('42432 dsadsada')
 
-    })
+    // })
 
     it('should properly handle dependency with unresolved external', async () => {
         const module = buildContainer(c => c
@@ -279,23 +279,23 @@ describe('Builder', () => {
         expect(await container.get('b')).toEqual('dsada')
     })
 
-    // it('should fail when providing wrong keys', async () => {
+    it('should fail when providing wrong keys', async () => {
 
-    //     const second = buildContainer(c => c.externals<{a: number, b: number}>())
-    //     const main = buildContainer(c => c
-    //         .externals<{a: number, b: number}>()
-    //         .resolve({
-    //             a: 5,
-    //             b: 432,
-    //         })
-    //         .submodules({ second })
-    //         .resolve({
-    //             'second.a': 3243
-    //         })
-    //     )
+        const second = buildContainer(c => c.externals<{a: number, b: number}>())
+        const main = buildContainer(c => c
+            .externals<{a: number, b: number}>()
+            .resolve({
+                a: 5,
+            })
+            .submodules({ second })
+            .resolve({
+                'second.a': 3243
+            })
+        )
 
-    //     const c = main.build({
-    //         'second.b': 42,
-    //     })
-    // })
+        const c = main.build({
+            'b': 342,
+            'second.b': 42,
+        })
+    })
 })

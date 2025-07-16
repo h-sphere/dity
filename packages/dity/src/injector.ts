@@ -17,10 +17,15 @@ export type UnwrapConfiguration<T> = Prettify<{
 export type GetAllContainerTypes<T> = T extends Submodule<infer A, infer B>
 ? A & B : never
 
-export function makeInjector<const B>() {
+export function makeInjector<const B, const T extends 'factory' | 'class' = 'class'>() {
     type Deps = GetAllContainerTypes<B>
+
     return function injector<const Inject extends Array<(keyof Deps & string)>>(config: Inject) {
-        return function<T extends (new (...args: ArgsToDeps<Deps, Inject>) => any) | ({ make(...args: ArgsToDeps<Deps, Inject>): any }) |  ((...args: ArgsToDeps<Deps, Inject>) => any)>(constructor: T): any /*T*/ {
+        type Args = ArgsToDeps<Deps, Inject>
+        type AsClass = new (...args: Args) => any
+        type AsFactory = (new (...args: []) => { make(...args: Args): any })
+        type TTT = T extends 'factory' ? AsFactory : AsClass
+        return function<const T extends TTT>(constructor: T): any /*T*/ {
             // Injecting
             const modified: any = constructor
             modified[DI_KEY] = config.map((dep, i) => {

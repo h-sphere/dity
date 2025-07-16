@@ -1,7 +1,26 @@
+import { PluginContainer } from "vite"
 import { buildContainer } from "./builder"
 import { Container } from "./container"
 import { makeInjector } from "./injector"
-import { asClass } from "./wrappers"
+import { asClass, asFactory } from "./wrappers"
+
+
+// class F {
+//     make(a: number, b: string) { }
+// }
+
+// class Const { 
+//     constructor(a: number, b: string) { }
+// }
+
+// type AsClass = new (...args: [number, string]) => { make: undefined }
+// type AsFactory = (new (...args: []) => { make(...args: [number, string]): any })
+
+// function f<const T extends AsClass | AsFactory>(t: T ) { }
+
+// f(F)
+
+// f(Const)
 
 describe('Container', () => {
     it('should properly resolve container constants', async () => {
@@ -156,5 +175,32 @@ describe('Container', () => {
         const withFarExtern = await container.get('c.b.a.extras')
         expect(withFarExtern.b).toEqual('abc result')
         expect(withFarExtern.k).toEqual(5)
+    })
+
+    it('should properly resolve type of async factory', async () => {
+        class AFactory {
+            async make() {
+                return Promise.resolve(5)
+            }
+        }
+
+        const module = buildContainer(c => c.register({
+            f: asFactory(AFactory),
+            f2: asFactory(BFactory)
+        }))
+
+        @(makeInjector<typeof module, 'factory'>()(['f']))
+        class BFactory {
+            async make(v: number) {
+                return (await Promise.resolve(v * v)).toString()
+            }
+        }
+
+        const container = module.build()
+        const f1 = await container.get('f')
+        expect(f1).toEqual(5)
+        
+        const f2 = await container.get('f2')
+        expect(f2).toEqual("25")
     })
 })

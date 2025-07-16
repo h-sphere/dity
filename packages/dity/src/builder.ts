@@ -37,7 +37,7 @@ type WithType<Dict, Type> = {
 
 type Res<T> = ({} extends T ? [] : [T])
 
-type ResolveConfigs<T> = { [K in keyof T]: T[K] extends Configuration<infer C> ? C : T[K] }
+type ResolveConfigs<T> = { [K in keyof T]: Awaited<T[K] extends Configuration<infer C> ? C : T[K]> }
 
 export const setSymbol = Symbol('setSymbol')
 
