@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.0.8
+
+### Patch Changes
+
+- 14f7e94: async dependencies are instantiated now once
+
 ## 0.0.7
 
 ### Patch Changes
