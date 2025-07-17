@@ -225,7 +225,7 @@ describe('Builder', () => {
         const c = module
             .resolve({
                 'sub.dbUrl': asValue('production-url'),
-                'sub.logger': jest.fn((m: string) => console.log('HELLO')),
+                'sub.logger': jest.fn((m: string) => {}),
                 'sub.retryTimes': 5
             })
             .build()
@@ -297,5 +297,46 @@ describe('Builder', () => {
             'b': 342,
             'second.b': 42,
         })
+    })
+
+    it('should run async factory once', async () => {
+        const fn = jest.fn()
+
+        const module = buildContainer(c =>
+            c.register({
+                f: asFactory(Factory),
+                f2: asFactory(Factory2),
+                f3: asFactory(Factory3)
+            })
+        )
+
+        @(makeInjector<typeof module, 'factory'>()([]))
+        class Factory {
+            async make() {
+                fn()
+                return Promise.resolve(2)
+            }
+        }
+
+
+        @(makeInjector<typeof module, 'factory'>()([
+            'f'
+        ]))
+        class Factory2 {
+            async make(f: number) {
+                return Promise.resolve(f * 5)
+            }
+        }
+        @(makeInjector<typeof module, 'factory'>()(['f', 'f2']))
+        class Factory3 {
+            async make(a: number, b: number) {
+                return Promise.resolve(a * b)
+            }
+        }
+
+        const container = module.build()
+        const f3 = await container.get('f3')
+        expect(f3).toEqual(20)
+        expect(fn).toHaveBeenCalledTimes(1)
     })
 })

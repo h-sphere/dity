@@ -82,8 +82,11 @@ export class Container<D extends Dependencies> {
                 return this.getWithModule(this.transformReferences(dep) as any, parentChain) as any
             } else if (isConfiguration(dep)) {
                 // Resolving dependencies
-                const deps = await Promise.all(dep.deps.map((d: DependencyInfo) => this.getWithModule(this.transformReferences(d) as any, parentChain)))
-                const dependency = dep.generator(deps)
+                let deps = []
+                for (const d of dep.deps) {
+                    deps.push(await this.getWithModule(this.transformReferences(d) as any, parentChain))
+                }
+                const dependency = await dep.generator(deps)
                 this.#dependencies.set(key, dependency)
                 return dependency
             } else if (typeof dep === 'object' && 'ref' in dep) {

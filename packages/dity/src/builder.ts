@@ -92,8 +92,6 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
             .map(([key, v]) => ([key, typeof v === 'string' ? { ref: v} : v]))
         )
 
-        console.log('newdeps', newDeps)
-
         c.#dependencies = {
             ...c.#dependencies,
             ...newDeps
