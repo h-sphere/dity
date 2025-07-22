@@ -24,12 +24,12 @@ export class Container<D extends Dependencies> {
     #dependencyDefinitions: Dependencies = {}
     #dependencies = new Map<keyof D, D[keyof D]>()
 
-    #submoduleDefinitions: Record<string, Submodule<any, any>> = {}
+    #submoduleDefinitions: Record<string, Submodule<any, any, any>> = {}
     #submodules = new Map<string, Container<any>>()
 
     #currentModule: symbol
 
-    constructor(deps: Dependencies, submodules: Record<string, Submodule<any, any>>, name: symbol = Symbol()) {
+    constructor(deps: Dependencies, submodules: Record<string, Submodule<any, any, any>>, name: symbol = Symbol()) {
         this.#dependencyDefinitions = deps
         this.#submoduleDefinitions = submodules
         this.#currentModule = name

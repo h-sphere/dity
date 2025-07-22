@@ -1,7 +1,7 @@
 import { buildContainer } from "./builder"
 import { makeInjector } from "./injector"
 import { inspect } from "./inspector"
-import { asFactory } from "./wrappers"
+import { asFactory, asValue } from "./wrappers"
 
 describe('Inspector', () => {
     it('should return shape of the module', () => {
@@ -78,5 +78,22 @@ describe('Inspector', () => {
                 "type": "reference",
             },
         ])
+    })
+
+    it.skip('should have 2 submodules refering each other', async () => {
+        const modA = buildContainer(c => c.externals<{modAA: string, modAB: string }>())
+        const modB = buildContainer(c => c.externals<{modBA: string, modBB: string }>())
+        const mod = buildContainer(c => c.submodules({ modA, modB }).register({ a: 'hello' }))
+            .resolve({
+                'modA.modAA': 'modB.modBA',
+                'modA.modAB': 'modB.modBB'
+            })
+            .resolve({
+                'modB.modBA': asValue('aaa'),
+                'modB.modBB': asValue('dsada')
+            })
+        const inspector = inspect(mod.build())
+        const deps = inspector.getDependencies()
+        expect(deps).toEqual({})
     })
 })

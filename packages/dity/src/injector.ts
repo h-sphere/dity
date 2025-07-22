@@ -14,7 +14,7 @@ export type UnwrapConfiguration<T> = Prettify<{
 
 // export type ResolveContaierKeys<T extends Rec, D extends SubmodulesRec> = UnwrapConfiguration<T>
 
-export type GetAllContainerTypes<T> = T extends Submodule<infer A, infer B>
+export type GetAllContainerTypes<T> = T extends Submodule<infer A, infer B, any>
 ? A & B : never
 
 export function makeInjector<const B, const T extends 'factory' | 'class' = 'class'>() {
