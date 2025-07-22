@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.0.9
+
+### Patch Changes
+
+- 93bb514: added explicit exports
+
 ## 0.0.8
 
 ### Patch Changes
