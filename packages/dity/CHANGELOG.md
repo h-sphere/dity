@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.0.10
+
+### Patch Changes
+
+- 7fe62b8: optimising performance of the project
+
 ## 0.0.9
 
 ### Patch Changes
