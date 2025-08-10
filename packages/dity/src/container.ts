@@ -1,19 +1,20 @@
 import { setSymbol, Submodule } from "./builder"
 import { DependencyInfo, MODULE_KEY } from "./utils"
+import { createDependencyNotFoundError, createModuleNotFoundError, CircularDependencyError } from "./errors"
 
-export type Dependencies = Record<string, any> // FIXME: BETTER TYPING HERE
+export type Dependencies = Record<string, unknown>
 
 export const constructorMethod = Symbol('constructor')
 export const registerExternals = Symbol('registerExternals')
 export const getInternals = Symbol('getInternals')
 
 export type Configuration<T> = {
-    generator: (args: any[]) => T,
+    generator: (args: unknown[]) => T,
     deps: DependencyInfo[]
 }
 
-export const isConfiguration = (k: any): k is Configuration<any> => {
-    return !!k['generator']
+export const isConfiguration = <T = unknown>(k: unknown): k is Configuration<T> => {
+    return typeof k === 'object' && k !== null && 'generator' in k && typeof k.generator === 'function'
 }
 
 export const isDependencyReference = (t: unknown): t is DependencyInfo => {
@@ -45,7 +46,7 @@ export class Container<D extends Dependencies> {
         if (typeof v === 'object' && v !== null && 'ref' in v && typeof v.ref === 'string') {
             return {
                 ref: v.ref,
-                [MODULE_KEY]: MODULE_KEY in v && typeof v[MODULE_KEY] === 'symbol' ? v[MODULE_KEY] : this.#currentModule
+                [MODULE_KEY]: MODULE_KEY in v && typeof v[MODULE_KEY] === 'symbol' && v[MODULE_KEY].description !== 'INJECTOR_PLACEHOLDER' ? v[MODULE_KEY] : this.#currentModule
             } satisfies DependencyInfo
         }
         return v
@@ -68,47 +69,63 @@ export class Container<D extends Dependencies> {
             this.#submodules.set(k, built)
             return built
         }
-        throw new Error('Module not found: ' + k + ` (in ${this.#currentModule.toString()})`)
+        const availableModules = Object.keys(this.#submoduleDefinitions)
+        throw createModuleNotFoundError(k, this.#currentModule.description ?? 'unknown', availableModules)
     }
 
-    private async getDependencyInstance<const K extends keyof D & string>(key: K, parentChain: Container<any>[]): Promise<D[K]> {
+    private async getDependencyInstance<const K extends keyof D & string>(key: K, parentChain: Container<any>[], resolutionChain: string[] = []): Promise<D[K]> {
+        // Create fully qualified key for resolution tracking
+        const modulePrefix = this.#currentModule.description ?? 'unknown'
+        const fullyQualifiedKey = modulePrefix === 'toplevel' ? key : `${modulePrefix}.${key}`
+        
+        // Check for circular dependencies using fully qualified keys
+        if (resolutionChain.includes(fullyQualifiedKey)) {
+            throw new CircularDependencyError([...resolutionChain, fullyQualifiedKey])
+        }
         if (this.#dependencies.has(key)) {
             return this.#dependencies.get(key)! as D[K]
         }
         if (key in this.#dependencyDefinitions) {
             const dep = this.#dependencyDefinitions[key]
-            // FIXME: if is configuration, resolving config
+            // Handle different dependency types
             if (isDependencyReference(dep)) {
-                return this.getWithModule(this.transformReferences(dep) as any, parentChain) as any
+                return this.getWithModule(this.transformReferences(dep) as DependencyInfo, parentChain, [...resolutionChain, fullyQualifiedKey]) as D[K]
             } else if (isConfiguration(dep)) {
                 // Resolving dependencies
                 let deps = []
+                const newChain = [...resolutionChain, fullyQualifiedKey]
                 for (const d of dep.deps) {
-                    deps.push(await this.getWithModule(this.transformReferences(d) as any, parentChain))
+                    deps.push(await this.getWithModule(this.transformReferences(d) as DependencyInfo, parentChain, newChain))
                 }
                 const dependency = await dep.generator(deps)
-                this.#dependencies.set(key, dependency)
-                return dependency
-            } else if (typeof dep === 'object' && 'ref' in dep) {
-                const res: Dependencies[K] = await this.getWithModule(this.transformReferences(dep) as DependencyInfo, parentChain)
-                this.#dependencies.set(key, res)
-                return res
+                this.#dependencies.set(key, dependency as D[keyof D])
+                return dependency as D[K]
+            } else if (typeof dep === 'object' && dep !== null && 'ref' in dep) {
+                const res: Dependencies[K] = await this.getWithModule(this.transformReferences(dep) as DependencyInfo, parentChain, [...resolutionChain, fullyQualifiedKey])
+                this.#dependencies.set(key, res as D[keyof D])
+                return res as D[K]
             } else {
-                this.#dependencies.set(key, dep)
-                return dep
+                this.#dependencies.set(key, dep as D[keyof D])
+                return dep as D[K]
             }
         }
 
         // We need to go deeper
         const [module, ...rest] = key.split('.')
         if (rest.length <= 0) {
-            throw new Error('Dependency not found: ' + key + ` (for ${this.#currentModule.toString()})`)
+            const availableDeps = Object.keys(this.#dependencyDefinitions)
+            throw createDependencyNotFoundError(
+                key, 
+                this.#currentModule.description ?? 'unknown', 
+                availableDeps,
+                parentChain.map(p => p.#currentModule.description ?? 'unknown')
+            )
         }
         const subKey = rest.join('.')
-        return this.getModule(module).getWithModule(subKey, [this, ...parentChain])
+        return this.getModule(module).getWithModule(subKey, [this, ...parentChain], [...resolutionChain, fullyQualifiedKey])
     }
 
-    private async getWithModule<const K extends keyof D & string>(conf: K | DependencyInfo, parentChain: Container<any>[] = []): Promise<D[K]> {
+    private async getWithModule<const K extends keyof D & string>(conf: K | DependencyInfo, parentChain: Container<any>[] = [], resolutionChain: string[] = []): Promise<D[K]> {
         let { module, key } = typeof conf === 'string' ? {
             module: this.#currentModule, key: conf
         } : {
@@ -117,18 +134,25 @@ export class Container<D extends Dependencies> {
         }
 
         if (module === this.#currentModule) {
-            return this.getDependencyInstance(key, parentChain) as D[K]
+            return this.getDependencyInstance(key, parentChain, resolutionChain) as D[K]
         }
         // We need to go up the tree?
         const matchingParent = parentChain.find(p => p.#currentModule === module)
         if (matchingParent) {
-            return matchingParent.getWithModule(conf, parentChain) // FIXME: we should probably cut chain to the parent's index here.
+            // Cut the parent chain to avoid circular references
+            const parentIndex = parentChain.findIndex(p => p.#currentModule === module)
+            const trimmedChain = parentIndex >= 0 ? parentChain.slice(0, parentIndex) : parentChain
+            return matchingParent.getWithModule(conf, trimmedChain, resolutionChain)
         }
-        throw new Error('Module not found for: ' + key)
+        throw createModuleNotFoundError(
+            module.description ?? 'unknown',
+            this.#currentModule.description ?? 'unknown',
+            parentChain.map(p => p.#currentModule.description ?? 'unknown')
+        )
     }
 
     async get<const K extends keyof D & string>(key: K): Promise<D[K]> {
-        return this.getWithModule(key)
+        return this.getWithModule(key, [], [])
     };
 
     [getInternals]() {

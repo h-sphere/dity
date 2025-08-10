@@ -2,6 +2,7 @@ import { buildContainer } from "./builder"
 import { makeInjector } from "./injector"
 import { inspect } from "./inspector"
 import { asFactory, asValue } from "./wrappers"
+import { MODULE_KEY } from "./utils"
 
 describe('Inspector', () => {
     it('should return shape of the module', () => {
@@ -54,9 +55,11 @@ describe('Inspector', () => {
                 "deps": [
                     {
                         "ref": "a",
+                        [MODULE_KEY]: expect.any(Symbol),
                     },
                     {
                         "ref": "b",
+                        [MODULE_KEY]: expect.any(Symbol),
                     },
                 ],
                 "key": "sub.combined",

@@ -1,6 +1,6 @@
 import { Submodule } from "./builder"
 import { ArgsToDeps } from "./types"
-import { DependencyInfo } from "./utils";
+import { DependencyInfo, MODULE_KEY } from "./utils";
 import { Configuration } from "./wrappers"
 
 export const DI_KEY = Symbol('DI_KEY')
@@ -25,22 +25,26 @@ export function makeInjector<const B, const T extends 'factory' | 'class' = 'cla
         type AsClass = new (...args: Args) => any
         type AsFactory = (new (...args: []) => { make(...args: Args): any })
         type TTT = T extends 'factory' ? AsFactory : AsClass
-        return function<const T extends TTT>(constructor: T): any /*T*/ {
+        return function<const T extends TTT>(constructor: T): T {
             // Injecting
-            const modified: any = constructor
-            modified[DI_KEY] = config.map((dep, i) => {
+            const modified = constructor as T & { [DI_KEY]: DependencyInfo[] }
+            modified[DI_KEY] = config.map((dep) => {
                 return {
                     ref: dep,
-                }
+                    [MODULE_KEY]: Symbol('INJECTOR_PLACEHOLDER') // Placeholder to be replaced by container
+                } satisfies DependencyInfo
             })
             return modified
         }
     }
 }
 
-export const getDependencies = (target: any) => {
-    if (target[DI_KEY]) {
-        return target[DI_KEY]
+export const getDependencies = (target: unknown): DependencyInfo[] => {
+    if (target !== null && (typeof target === 'object' || typeof target === 'function')) {
+        if (DI_KEY in target) {
+            const deps = (target as { [DI_KEY]: DependencyInfo[] })[DI_KEY]
+            return Array.isArray(deps) ? deps : []
+        }
     }
     return []
 }

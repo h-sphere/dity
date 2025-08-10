@@ -3,7 +3,7 @@ import { asValue, Configuration } from "./wrappers"
 
 type DependenciesObjectType = Record<string, unknown>
 
-export type Submodule<Deps extends Record<string, any>, Unresolved extends Record<string, any>, Exports extends keyof Deps = never> = ContainerBuilderResolver<Deps, Unresolved, Exports> | ContainerBuilder<Deps, Unresolved, Exports>
+export type Submodule<Deps extends Record<string, unknown> = Record<string, unknown>, Unresolved extends Record<string, unknown> = Record<string, unknown>, Exports extends keyof Deps = never> = ContainerBuilderResolver<Deps, Unresolved, Exports> | ContainerBuilder<Deps, Unresolved, Exports>
 
 // Optimized type utilities for better performance
 type Prettify<T> = {
@@ -99,7 +99,7 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
     }
 
 
-    externals<NewExternals extends Record<string, any>>(): ContainerBuilder<Dependencies, Unresolved & NewExternals, Exports> {
+    externals<NewExternals extends Record<string, unknown>>(): ContainerBuilder<Dependencies, Unresolved & NewExternals, Exports> {
         return this as any
     }
 
@@ -124,7 +124,6 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
 
 
     #symbolToSet = Symbol();
-    // FIXME: this should be symbol itself
     [setSymbol](name: symbol) {
         this.#symbolToSet = name
         return this
