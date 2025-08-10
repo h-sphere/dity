@@ -1,6 +1,6 @@
 import { Submodule } from "./builder"
 import { ArgsToDeps } from "./types"
-import { DependencyInfo, MODULE_KEY } from "./utils";
+import { DependencyInfo, MODULE_KEY, INJECTOR_PLACEHOLDER } from "./utils";
 import { Configuration } from "./wrappers"
 
 export const DI_KEY = Symbol('DI_KEY')
@@ -31,7 +31,7 @@ export function makeInjector<const B, const T extends 'factory' | 'class' = 'cla
             modified[DI_KEY] = config.map((dep) => {
                 return {
                     ref: dep,
-                    [MODULE_KEY]: Symbol('INJECTOR_PLACEHOLDER') // Placeholder to be replaced by container
+                    [MODULE_KEY]: INJECTOR_PLACEHOLDER
                 } satisfies DependencyInfo
             })
             return modified

@@ -1,5 +1,5 @@
 import { setSymbol, Submodule } from "./builder"
-import { DependencyInfo, MODULE_KEY } from "./utils"
+import { DependencyInfo, MODULE_KEY, INJECTOR_PLACEHOLDER } from "./utils"
 import { createDependencyNotFoundError, createModuleNotFoundError, CircularDependencyError } from "./errors"
 
 export type Dependencies = Record<string, unknown>
@@ -46,7 +46,7 @@ export class Container<D extends Dependencies> {
         if (typeof v === 'object' && v !== null && 'ref' in v && typeof v.ref === 'string') {
             return {
                 ref: v.ref,
-                [MODULE_KEY]: MODULE_KEY in v && typeof v[MODULE_KEY] === 'symbol' && v[MODULE_KEY].description !== 'INJECTOR_PLACEHOLDER' ? v[MODULE_KEY] : this.#currentModule
+                [MODULE_KEY]: MODULE_KEY in v && typeof v[MODULE_KEY] === 'symbol' && v[MODULE_KEY] !== INJECTOR_PLACEHOLDER ? v[MODULE_KEY] : this.#currentModule
             } satisfies DependencyInfo
         }
         return v
