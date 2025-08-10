@@ -32,7 +32,7 @@ export const asFactory = <const T extends MakeableConstructor<Array<any>, any>>(
     }
 })
 
-export const asValue = (v: string): Configuration<string> => ({
+export const asValue = <T>(v: T): Configuration<T> => ({
     deps: [],
     generator: () => v
 })
