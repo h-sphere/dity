@@ -23,7 +23,10 @@
     "format": "prettier --write \"packages/**/*.{ts,js,json,md}\" \"examples/**/*.{ts,js,json,md}\" \"*.{js,json,md}\"",
     "format:check": "prettier --check \"packages/**/*.{ts,js,json,md}\" \"examples/**/*.{ts,js,json,md}\" \"*.{js,json,md}\"",
     "test": "cd packages/dity && pnpm test",
-    "test:coverage": "cd packages/dity && pnpm test:coverage"
+    "test:coverage": "cd packages/dity && pnpm test:coverage",
+    "size": "size-limit",
+    "size:analyze": "size-limit --why",
+    "size:json": "size-limit --json"
   },
   "keywords": [
     "dependency injection",
@@ -40,6 +43,28 @@
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.0.0"
-  }
+    "prettier": "^3.0.0",
+    "size-limit": "^11.0.0",
+    "@size-limit/preset-small-lib": "^11.0.0"
+  },
+  "size-limit": [
+    {
+      "name": "dity (ESM)",
+      "path": "packages/dity/dist/dity.es.js",
+      "limit": "10 KB",
+      "gzip": true
+    },
+    {
+      "name": "dity (UMD)",
+      "path": "packages/dity/dist/dity.umd.js",
+      "limit": "8 KB",
+      "gzip": true
+    },
+    {
+      "name": "dity-graph (ESM)",
+      "path": "packages/dity-graph/dist/dity.es.js",
+      "limit": "100 KB",
+      "gzip": true
+    }
+  ]
 }
