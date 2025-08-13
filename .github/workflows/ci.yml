@@ -38,6 +38,9 @@ jobs:
       - name: Run tests with coverage
         run: pnpm run test:coverage
 
+      - name: Check bundle size
+        run: pnpm run size
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
