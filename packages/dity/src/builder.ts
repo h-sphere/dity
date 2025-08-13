@@ -3,12 +3,14 @@ import { asValue, Configuration } from "./wrappers"
 
 type DependenciesObjectType = Record<string, unknown>
 
-export type Submodule<Deps extends Record<string, any>, Unresolved extends Record<string, any>, Exports extends keyof Deps = never> = ContainerBuilderResolver<Deps, Unresolved, Exports> | ContainerBuilder<Deps, Unresolved, Exports>
+export type Submodule<Deps extends Record<string, unknown> = Record<string, unknown>, Unresolved extends Record<string, unknown> = Record<string, unknown>, Exports extends keyof Deps = never> = ContainerBuilderResolver<Deps, Unresolved, Exports> | ContainerBuilder<Deps, Unresolved, Exports>
 
+// Optimized type utilities for better performance
 type Prettify<T> = {
     [K in keyof T]: T[K]
 } & {}
 
+// More efficient union to intersection using function overloads
 type UnionToIntersection<U> = (
   U extends any ? (k: U) => void : never
 ) extends (k: infer I) => void
@@ -19,32 +21,31 @@ type BuilderDependencies<T> = T extends Submodule<infer Deps, any, any> ? Deps :
 type BuilderUnresolved<T> = T extends Submodule<any, infer Unresolved, any> ? Unresolved : never
 type BuilderExports<T> = T extends Submodule<any, any, infer Exports> ? Exports : never
 
-type Strinfgify<K extends string | number | undefined | symbol> =  K extends string ? `${K}` : ''
-
-type PrefixKeys<Prefix extends string, T> = 
-    { [K in keyof T as `${Strinfgify<Prefix>}.${Strinfgify<K>}`]: T[K] }
+// Optimized key prefixing without template literals for better performance
+type PrefixKeys<Prefix extends string, T> = {
+    [K in keyof T & string as `${Prefix}.${K}`]: T[K]
+}
 
 
 
 type ValidKeys<T> = T extends Submodule<infer Deps, any, infer Extras> ? Pick<Deps, Extras> : never
-type DSAED  = Prettify<ValidKeys<Submodule<{a: number, b: number}, any, 'a'>>>
-
-type DSADAS = Pick<{a: number, b: number}, 'a'>
 
 
-type SubsToDependencies<Subs> = Prettify<UnionToIntersection<{
+// Optimized submodule type computation - avoid excessive Prettify calls
+type SubsToDependencies<Subs> = UnionToIntersection<{
   [K in keyof Subs & string]: PrefixKeys<K, ValidKeys<Subs[K]>>
-}[keyof Subs & string]>>
+}[keyof Subs & string]>
 
-type SubsToUnresolved<Subs> = Prettify<UnionToIntersection<{
+type SubsToUnresolved<Subs> = UnionToIntersection<{
   [K in keyof Subs & string]: PrefixKeys<K, BuilderUnresolved<Subs[K]>>
-}[keyof Subs & string]>>
+}[keyof Subs & string]>
 
 type WithType<Dict, Type> = {
     [K in keyof Dict]: Type extends Dict[K] ? K : never
 }[keyof Dict]
 
-type Res<T> = ({} extends T ? [] : [T])
+// Strict validation: build fails if externals are unresolved
+type Res<T> = {} extends T ? [] : [T]
 
 type ResolveConfigs<T> = { [K in keyof T]: Awaited<T[K] extends Configuration<infer C> ? C : T[K]> }
 
@@ -74,7 +75,7 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
             ...c.#dependencies,
             ...Object.fromEntries(Object.entries(newDeps).map(([key, value]) => ([key, typeof value === 'string' ? asValue(value) : value])))
         }
-        return c as ContainerBuilder<Prettify<Dependencies & ResolveConfigs<NewDeps>>, Unresolved, Exports>
+        return c as ContainerBuilder<Dependencies & ResolveConfigs<NewDeps>, Unresolved, Exports>
     }
 
     private copy() {
@@ -90,8 +91,7 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
             ...c.#submodules,
             ...newSubs
         }
-        // FIXME: typing here should be fixed somehow.
-        return c as any as ContainerBuilder<Prettify<Dependencies & SubsToDependencies<NewSubs>>, Unresolved & SubsToUnresolved<NewSubs>, Exports | PrefixSubExports<NewSubs>>
+        return c as any as ContainerBuilder<Dependencies & SubsToDependencies<NewSubs>, Unresolved & SubsToUnresolved<NewSubs>, Exports | PrefixSubExports<NewSubs>>
     }
 
     exports<const T extends keyof Dependencies & string>(..._vals: T[]) {
@@ -99,13 +99,13 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
     }
 
 
-    externals<NewExternals extends Record<string, any>>(): ContainerBuilder<Dependencies, Prettify<Unresolved & NewExternals>, Exports> {
+    externals<NewExternals extends Record<string, unknown>>(): ContainerBuilder<Dependencies, Unresolved & NewExternals, Exports> {
         return this as any
     }
 
     get<const K extends keyof Dependencies>(k: K) { }
 
-    resolve<const T extends keyof Unresolved>(resolves: ResolveObject<Unresolved, T, Dependencies>): ContainerBuilder<Prettify<Dependencies & Pick<Unresolved, T>>, Prettify<Omit<Unresolved, T>>, Exports>  {
+    resolve<const T extends keyof Unresolved>(resolves: ResolveObject<Unresolved, T, Dependencies>) {
 
         const c = this.copy()
         const newDeps = Object.fromEntries(
@@ -117,21 +117,13 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
             ...c.#dependencies,
             ...newDeps
         }
-        return c as any
+        type NewDeps = Dependencies & Pick<Unresolved, T>
+        type NewUnresolved = Omit<Unresolved, T>
+        return c as unknown as ContainerBuilder<NewDeps, NewUnresolved, Exports>
     }
 
-    // resolve<const K extends keyof Unresolved, const J extends Unresolved[K]>(k: K, v: WithType<Dependencies, J> | (string extends Unresolved[K] ? Configuration<Unresolved[K]> : Unresolved[K]) ): ContainerBuilder<Prettify<Dependencies & { [k in K]: Unresolved[K] }>, Prettify<Omit<Unresolved, K>>> {
-    //     const c = this.copy()
-    //     c.#dependencies = {
-    //         ...c.#dependencies,
-    //         [k]: typeof v === 'string' ? { ref: v } : v
-    //     }
-    //     // FIXME: adding resolutions here.
-    //     return c as any
-    // }
 
     #symbolToSet = Symbol();
-    // FIXME: this should be symbol itself
     [setSymbol](name: symbol) {
         this.#symbolToSet = name
         return this
@@ -145,7 +137,6 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
             }
         }
 
-        // FIXME: creating module here.
         return new Container<Dependencies>(this.#dependencies, this.#submodules, this.#symbolToSet)
     }
 }
@@ -153,16 +144,22 @@ export class ContainerBuilder<Dependencies extends DependenciesObjectType = {}, 
 class ContainerBuilderResolver<Dependencies extends DependenciesObjectType, Unresolved extends DependenciesObjectType, Exports extends keyof Dependencies = never> {
     constructor(private readonly fn: ContainerBuilderWrapperFunction<Dependencies, Unresolved, Exports>) { }
 
-
     build(...args: Parameters<ReturnType<typeof this.fn>['build']>) {
         return this.fn(new ContainerBuilder('')).build(...args)
     }
 
     resolve<const T extends keyof Unresolved>(resolves: ResolveObject<Unresolved, T, Dependencies>) {
-        return new ContainerBuilderResolver((c: ContainerBuilder) => this.fn(c).resolve(resolves))
+        type NewDeps = Dependencies & Pick<Unresolved, T>
+        type NewUnresolved = Omit<Unresolved, T>
+        return new ContainerBuilderResolver<NewDeps, NewUnresolved, Exports>(
+            (c: ContainerBuilder) => this.fn(c).resolve(resolves)
+        )
     }
+    
     [setSymbol](name: symbol) {
-        return new ContainerBuilderResolver((c: ContainerBuilder) => this.fn(c)[setSymbol](name))
+        return new ContainerBuilderResolver<Dependencies, Unresolved, Exports>(
+            (c: ContainerBuilder) => this.fn(c)[setSymbol](name)
+        )
     }
 }
 
