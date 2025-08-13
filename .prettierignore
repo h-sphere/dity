@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+**/*.d.ts
+docs/node_modules/
+packages/*/node_modules/
+packages/*/dist/
+.pnpm-store/
+coverage/
+*.log
+*.tgz
+pnpm-lock.yaml
+.changeset/
+CHANGELOG.md
