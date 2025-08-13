@@ -1,75 +1,75 @@
 {
-  "name": "@hypersphere/dity-monorepo",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Monorepo for Dity - a type-safe dependency injection library for TypeScript",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/h-sphere/dity.git"
-  },
-  "scripts": {
-    "build": "pnpm run dity-build && pnpm run dity-graph-build",
-    "explorer:dev": "cd packages/dity-explorer && pnpm run dev",
-    "dity-build": "cd packages/dity && pnpm build && cd ..",
-    "dity-graph-build": "cd packages/dity-graph && pnpm build && cd ..",
-    "dity-explorer-build": "cd packages/dity-explorer && pnpm build && cd ..",
-    "docs:build": "cd docs && pnpm run docs-build",
-    "docs:dev": "cd docs && pnpm run docs",
-    "ci:publish": "pnpm publish -r",
-    "ci:build-docs": "./build-docs.sh",
-    "lint": "eslint packages/**/*.ts packages/**/*.js examples/**/*.ts",
-    "lint:fix": "eslint packages/**/*.ts packages/**/*.js examples/**/*.ts --fix",
-    "format": "prettier --write \"packages/**/*.{ts,js,json,md}\" \"examples/**/*.{ts,js,json,md}\" \"*.{js,json,md}\"",
-    "format:check": "prettier --check \"packages/**/*.{ts,js,json,md}\" \"examples/**/*.{ts,js,json,md}\" \"*.{js,json,md}\"",
-    "test": "cd packages/dity && pnpm test",
-    "test:coverage": "cd packages/dity && pnpm test:coverage",
-    "size": "size-limit",
-    "size:analyze": "size-limit --why",
-    "size:json": "size-limit --json"
-  },
-  "keywords": [
-    "dependency injection",
-    "di",
-    "typescript",
-    "monorepo",
-    "ioc",
-    "type-safe",
-    "framework",
-    "architecture"
-  ],
-  "author": "hypersphere",
-  "license": "MIT",
-  "packageManager": "pnpm@10.12.3",
-  "devDependencies": {
-    "@changesets/cli": "^2.29.5",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^9.0.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.0.0",
-    "size-limit": "^11.0.0",
-    "@size-limit/preset-small-lib": "^11.0.0"
-  },
-  "size-limit": [
-    {
-      "name": "dity (ESM)",
-      "path": "packages/dity/dist/dity.es.js",
-      "limit": "10 KB",
-      "gzip": true
-    },
-    {
-      "name": "dity (UMD)",
-      "path": "packages/dity/dist/dity.umd.js",
-      "limit": "8 KB",
-      "gzip": true
-    },
-    {
-      "name": "dity-graph (ESM)",
-      "path": "packages/dity-graph/dist/dity.es.js",
-      "limit": "100 KB",
-      "gzip": true
-    }
-  ]
+	"name": "@hypersphere/dity-monorepo",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Monorepo for Dity - a type-safe dependency injection library for TypeScript",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/h-sphere/dity.git"
+	},
+	"scripts": {
+		"build": "pnpm run dity-build && pnpm run dity-graph-build",
+		"explorer:dev": "cd packages/dity-explorer && pnpm run dev",
+		"dity-build": "cd packages/dity && pnpm build && cd ..",
+		"dity-graph-build": "cd packages/dity-graph && pnpm build && cd ..",
+		"dity-explorer-build": "cd packages/dity-explorer && pnpm build && cd ..",
+		"docs:build": "cd docs && pnpm run docs-build",
+		"docs:dev": "cd docs && pnpm run docs",
+		"ci:publish": "pnpm publish -r",
+		"ci:build-docs": "./build-docs.sh",
+		"lint": "eslint packages/**/*.ts packages/**/*.js examples/**/*.ts",
+		"lint:fix": "eslint packages/**/*.ts packages/**/*.js examples/**/*.ts --fix",
+		"format": "prettier --write \"packages/**/*.{ts,js,json,md}\" \"examples/**/*.{ts,js,json,md}\" \"*.{js,json,md}\"",
+		"format:check": "prettier --check \"packages/**/*.{ts,js,json,md}\" \"examples/**/*.{ts,js,json,md}\" \"*.{js,json,md}\"",
+		"test": "cd packages/dity && pnpm test",
+		"test:coverage": "cd packages/dity && pnpm test:coverage",
+		"size": "size-limit",
+		"size:analyze": "size-limit --why",
+		"size:json": "size-limit --json"
+	},
+	"keywords": [
+		"dependency injection",
+		"di",
+		"typescript",
+		"monorepo",
+		"ioc",
+		"type-safe",
+		"framework",
+		"architecture"
+	],
+	"author": "hypersphere",
+	"license": "MIT",
+	"packageManager": "pnpm@10.12.3",
+	"devDependencies": {
+		"@changesets/cli": "^2.29.5",
+		"@typescript-eslint/eslint-plugin": "^8.0.0",
+		"@typescript-eslint/parser": "^8.0.0",
+		"eslint": "^9.0.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-prettier": "^5.0.0",
+		"prettier": "^3.0.0",
+		"size-limit": "^11.0.0",
+		"@size-limit/preset-small-lib": "^11.0.0"
+	},
+	"size-limit": [
+		{
+			"name": "dity (ESM)",
+			"path": "packages/dity/dist/dity.es.js",
+			"limit": "10 KB",
+			"gzip": true
+		},
+		{
+			"name": "dity (UMD)",
+			"path": "packages/dity/dist/dity.umd.js",
+			"limit": "8 KB",
+			"gzip": true
+		},
+		{
+			"name": "dity-graph (ESM)",
+			"path": "packages/dity-graph/dist/dity.es.js",
+			"limit": "100 KB",
+			"gzip": true
+		}
+	]
 }
