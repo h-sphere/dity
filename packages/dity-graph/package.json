@@ -1,52 +1,52 @@
 {
-  "name": "@hypersphere/dity-graph",
-  "version": "0.0.10",
-  "description": "Interactive dependency graph visualization for the Dity dependency injection library",
-  "type": "module",
-  "main": "dist/dity.es.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "vite build"
-  },
-  "keywords": [
-    "dependency injection",
-    "di",
-    "typescript",
-    "visualization",
-    "dependency graph",
-    "sigma",
-    "graph visualization",
-    "interactive",
-    "network graph",
-    "dependency tree",
-    "architecture diagram",
-    "dity"
-  ],
-  "files": [
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
-  "author": "hypersphere",
-  "license": "MIT",
-  "packageManager": "pnpm@10.12.3",
-  "dependencies": {
-    "@sigma/node-border": "^3.0.0",
-    "chroma-js": "^3.1.2",
-    "@hypersphere/dity": "workspace:*",
-    "graphology": "^0.26.0",
-    "graphology-layout": "^0.6.1",
-    "graphology-layout-forceatlas2": "^0.10.1",
-    "lodash": "^4.17.21",
-    "sigma": "^3.0.2"
-  },
-  "devDependencies": {
-    "@types/chroma-js": "^3.1.1",
-    "@types/lodash": "^4.17.18",
-    "vite": "^7.0.0",
-    "vite-plugin-dts": "^4.5.4"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@hypersphere/dity-graph",
+	"version": "0.0.10",
+	"description": "Interactive dependency graph visualization for the Dity dependency injection library",
+	"type": "module",
+	"main": "dist/dity.es.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "vite build"
+	},
+	"keywords": [
+		"dependency injection",
+		"di",
+		"typescript",
+		"visualization",
+		"dependency graph",
+		"sigma",
+		"graph visualization",
+		"interactive",
+		"network graph",
+		"dependency tree",
+		"architecture diagram",
+		"dity"
+	],
+	"files": [
+		"dist/",
+		"README.md",
+		"LICENSE"
+	],
+	"author": "hypersphere",
+	"license": "MIT",
+	"packageManager": "pnpm@10.12.3",
+	"dependencies": {
+		"@sigma/node-border": "^3.0.0",
+		"chroma-js": "^3.1.2",
+		"@hypersphere/dity": "workspace:*",
+		"graphology": "^0.26.0",
+		"graphology-layout": "^0.6.1",
+		"graphology-layout-forceatlas2": "^0.10.1",
+		"lodash": "^4.17.21",
+		"sigma": "^3.0.2"
+	},
+	"devDependencies": {
+		"@types/chroma-js": "^3.1.1",
+		"@types/lodash": "^4.17.18",
+		"vite": "^7.0.0",
+		"vite-plugin-dts": "^4.5.4"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }

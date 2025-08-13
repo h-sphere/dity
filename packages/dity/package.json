@@ -1,53 +1,53 @@
 {
-  "name": "@hypersphere/dity",
-  "version": "0.0.10",
-  "description": "Type-safe dependency injection library for TypeScript with full compile-time validation and zero runtime overhead",
-  "type": "module",
-  "main": "dist/dity.es.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch",
-    "build": "vite build"
-  },
-  "keywords": [
-    "dependency injection",
-    "di",
-    "typescript",
-    "ioc",
-    "inversion of control",
-    "type-safe",
-    "decorators",
-    "container",
-    "modular",
-    "compile-time",
-    "zero-runtime",
-    "framework",
-    "architecture"
-  ],
-  "author": "hypersphere",
-  "license": "MIT",
-  "packageManager": "pnpm@10.12.3",
-  "dependencies": {
-    "typescript": "^5.8.3",
-    "vite": "^7.0.0"
-  },
-  "files": [
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
-  "devDependencies": {
-    "@shikijs/vitepress-twoslash": "^3.7.0",
-    "@types/jest": "^30.0.0",
-    "jest": "^30.0.1",
-    "ts-jest": "^29.4.0",
-    "ts-node": "^10.9.2",
-    "unplugin-dts": "1.0.0-beta.0",
-    "vitepress": "^1.6.3"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@hypersphere/dity",
+	"version": "0.0.10",
+	"description": "Type-safe dependency injection library for TypeScript with full compile-time validation and zero runtime overhead",
+	"type": "module",
+	"main": "dist/dity.es.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"test": "jest",
+		"test:coverage": "jest --coverage",
+		"test:watch": "jest --watch",
+		"build": "vite build"
+	},
+	"keywords": [
+		"dependency injection",
+		"di",
+		"typescript",
+		"ioc",
+		"inversion of control",
+		"type-safe",
+		"decorators",
+		"container",
+		"modular",
+		"compile-time",
+		"zero-runtime",
+		"framework",
+		"architecture"
+	],
+	"author": "hypersphere",
+	"license": "MIT",
+	"packageManager": "pnpm@10.12.3",
+	"dependencies": {
+		"typescript": "^5.8.3",
+		"vite": "^7.0.0"
+	},
+	"files": [
+		"dist/",
+		"README.md",
+		"LICENSE"
+	],
+	"devDependencies": {
+		"@shikijs/vitepress-twoslash": "^3.7.0",
+		"@types/jest": "^30.0.0",
+		"jest": "^30.0.1",
+		"ts-jest": "^29.4.0",
+		"ts-node": "^10.9.2",
+		"unplugin-dts": "1.0.0-beta.0",
+		"vitepress": "^1.6.3"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
