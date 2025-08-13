@@ -1,4 +1,4 @@
-import { buildContainer, ContainerBuilder } from "./builder";
+import { buildContainer, ContainerBuilder } from './builder'
 import { Container } from './container'
 import { makeInjector, DI_KEY } from "./injector";
 import { asClass, asFactory, asValue, asFunction } from './wrappers'

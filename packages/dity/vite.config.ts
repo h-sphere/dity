@@ -8,7 +8,7 @@ export default defineConfig({
       entry: 'src/index.ts',
       name: '@hypersphere/dity',
       fileName: (format) => `dity.${format}.js`
-    },
+    }
     // rollupOptions: {
     //   external: ['signia'],
     //   output: {
@@ -21,7 +21,7 @@ export default defineConfig({
   plugins: [
     dts({
       bundleTypes: true,
-      insertTypesEntry: true,
+      insertTypesEntry: true
     })
   ]
 })
