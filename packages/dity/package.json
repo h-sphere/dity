@@ -1,7 +1,7 @@
 {
   "name": "@hypersphere/dity",
   "version": "0.0.10",
-  "description": "",
+  "description": "Type-safe dependency injection library for TypeScript with full compile-time validation and zero runtime overhead",
   "type": "module",
   "main": "dist/dity.es.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,17 @@
   "keywords": [
     "dependency injection",
     "di",
-    "typescript"
+    "typescript",
+    "ioc",
+    "inversion of control",
+    "type-safe",
+    "decorators",
+    "container",
+    "modular",
+    "compile-time",
+    "zero-runtime",
+    "framework",
+    "architecture"
   ],
   "author": "hypersphere",
   "license": "MIT",
