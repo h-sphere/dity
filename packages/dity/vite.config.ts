@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-// @ts-ignore
 import dts from 'unplugin-dts/vite'
 
 export default defineConfig({
