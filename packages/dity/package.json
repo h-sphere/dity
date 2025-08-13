@@ -7,6 +7,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
     "build": "vite build"
   },
   "keywords": [

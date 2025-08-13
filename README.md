@@ -1,4 +1,10 @@
 # dity
+
+[![CI](https://github.com/h-sphere/dity/workflows/CI/badge.svg)](https://github.com/h-sphere/dity/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/h-sphere/dity/branch/main/graph/badge.svg)](https://codecov.io/gh/h-sphere/dity)
+[![npm version](https://badge.fury.io/js/@hypersphere%2Fdity.svg)](https://badge.fury.io/js/@hypersphere%2Fdity)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ![Dity Logo](./docs/public/dity.svg)
 
 **D**ependency **I**njection. **Ty**ped.

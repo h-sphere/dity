@@ -5,6 +5,7 @@ build/
 docs/node_modules/
 packages/*/node_modules/
 packages/*/dist/
+packages/*/coverage/
 .pnpm-store/
 coverage/
 *.log
