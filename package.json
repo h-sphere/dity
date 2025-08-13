@@ -2,7 +2,7 @@
   "name": "@hypersphere/dity-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "",
+  "description": "Monorepo for Dity - a type-safe dependency injection library for TypeScript",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -28,7 +28,12 @@
   "keywords": [
     "dependency injection",
     "di",
-    "typescript"
+    "typescript",
+    "monorepo",
+    "ioc",
+    "type-safe",
+    "framework",
+    "architecture"
   ],
   "author": "hypersphere",
   "license": "MIT",

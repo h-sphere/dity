@@ -1,7 +1,7 @@
 {
   "name": "@hypersphere/dity-explorer",
   "version": "1.0.7",
-  "description": "",
+  "description": "Interactive web-based playground for exploring and testing the Dity dependency injection library",
   "type": "module",
   "main": "index.js",
   "private": true,
@@ -12,7 +12,15 @@
   "keywords": [
     "dependency injection",
     "di",
-    "typescript"
+    "typescript",
+    "playground",
+    "interactive",
+    "monaco editor",
+    "web playground",
+    "code editor",
+    "typescript playground",
+    "dity",
+    "learning tool"
   ],
   "author": "hypersphere",
   "license": "MIT",

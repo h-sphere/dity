@@ -1,7 +1,7 @@
 {
   "name": "@hypersphere/dity-graph",
   "version": "0.0.10",
-  "description": "",
+  "description": "Interactive dependency graph visualization for the Dity dependency injection library",
   "type": "module",
   "main": "dist/dity.es.js",
   "types": "dist/index.d.ts",
@@ -12,8 +12,15 @@
     "dependency injection",
     "di",
     "typescript",
-    "visualisation",
-    "dependency graph"
+    "visualization",
+    "dependency graph",
+    "sigma",
+    "graph visualization",
+    "interactive",
+    "network graph",
+    "dependency tree",
+    "architecture diagram",
+    "dity"
   ],
   "files": [
     "dist/",
