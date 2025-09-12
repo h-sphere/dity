@@ -1,3 +1,3 @@
-import { Registrator, inspect } from "./new-version";
+import { Registrator, inspect } from './new-version'
 
 export { Registrator, inspect }

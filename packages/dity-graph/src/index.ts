@@ -35,14 +35,11 @@ export class DityGraph {
 		// // const container = this.containerBuilder.build()
 		// const deps = inspect(this.registrator)
 		// const colorScale = chroma.scale('Spectral').colors(modules.length)
-
 		// const moduleColor = (module: string) => {
 		// 	const indx = modules.findIndex(m => m === module)
 		// 	return colorScale[indx] ?? 'red'
 		// }
-
 		// const moduleName = (m: string) => `MODULE___${m}`
-
 		// // Adding modules
 		// modules.forEach((m, i) => {
 		// 	this.graph.addNode(moduleName(m), {
@@ -53,7 +50,6 @@ export class DityGraph {
 		// 		hidden: true // FIXME: add config for this?
 		// 	})
 		// })
-
 		// const M = modules.length
 		// const N = modules.length + deps.length
 		// this.deps = deps
@@ -78,7 +74,6 @@ export class DityGraph {
 		// 		...colors
 		// 	})
 		// })
-
 		// // Edges
 		// deps.forEach(d => {
 		// 	switch (d.type) {
@@ -108,9 +103,7 @@ export class DityGraph {
 		// 		weight: 20
 		// 	})
 		// })
-
 		// // Forces
-
 		// const sensibleSettings = forceAtlas2.inferSettings(this.graph)
 		// this.fa2Layout = new FA2Layout(this.graph, {
 		// 	settings: {

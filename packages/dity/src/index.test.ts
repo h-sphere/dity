@@ -1,6 +1,6 @@
-import { Registrator } from "./index"
+import { Registrator } from './index'
 describe('Imports test', () => {
-    it('should properly import packages', () => {
-        expect(Registrator).toBeTruthy()
-    })
+	it('should properly import packages', () => {
+		expect(Registrator).toBeTruthy()
+	})
 })
