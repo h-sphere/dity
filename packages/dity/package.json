@@ -39,12 +39,13 @@
 		"LICENSE"
 	],
 	"devDependencies": {
+		"@microsoft/api-extractor": "^7.52.13",
 		"@shikijs/vitepress-twoslash": "^3.7.0",
 		"@types/jest": "^30.0.0",
 		"jest": "^30.0.1",
 		"ts-jest": "^29.4.0",
 		"ts-node": "^10.9.2",
-		"unplugin-dts": "1.0.0-beta.0",
+		"unplugin-dts": "1.0.0-beta.6",
 		"vitepress": "^1.6.3"
 	},
 	"publishConfig": {
