@@ -1,5 +1,12 @@
 # @hypersphere/dity
 
+## 0.1.1
+
+### Patch Changes
+
+- 85aff4e: fixing issue with linking unresolved dependencies
+- acebe3c: allow to pass unresolved dependencies in the build call
+
 ## 0.1.0
 
 ### Minor Changes
