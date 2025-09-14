@@ -8,6 +8,10 @@ type KeysExtendingType<D extends Deps, T> = {
 	[I in keyof D]: Awaited<D[I]> extends T ? I : never
 }[keyof D]
 
+type KeysExtendingTypeNoAwait<D extends Deps, T> = {
+	[I in keyof D]: D[I] extends T ? I : never
+}[keyof D]
+
 type Values<D extends Deps, T extends Array<keyof D>> = {
 	[K in keyof T]: D[T[K]]
 }
@@ -185,7 +189,7 @@ export class Registrator<
 				: never
 	>(
 		k: K,
-		e: Exclude<KeysExtendingType<D, TYPE>, K>
+		e: Exclude<KeysExtendingTypeNoAwait<D, TYPE> | KeysExtendingTypeNoAwait<OutsideExternals, TYPE>, K>
 	): Registrator<D, Exclude<Externals, K>, Exports, Omit<OutsideExternals, K>> {
 		const v = {
 			args: [],

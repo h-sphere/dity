@@ -146,4 +146,84 @@ describe('Dity', () => {
 		expect(mod.get('fn')).toEqual(15)
 		expect(fn).toHaveBeenCalledTimes(1) // No second call
 	})
+
+	it('should allow to refer to injected value before its instantiated', () => {
+		const mod = new Registrator()
+			.import<'iA', number>()
+			.register('a', d => d.fn((a: number) => a * 2).inject('iA'))
+			.resolve('iA', d => d.value(5))
+			.build()
+		expect(mod.get('a')).toEqual(10)
+	})
+
+	it('should allow to link to the unresolved imports', () => {
+		const mod = new Registrator()
+			.import<'iA', number>()
+			.import<'iB', number>()
+			.link('iA', 'iB')
+			.resolve('iB', d => d.value(10))
+			.build()
+
+		expect(mod.get('iA')).toEqual(10)
+		expect(mod.get('iB')).toEqual(10)
+	})
+
+	it('should allow to link to unresolved imports of submodules', () => {
+		const sub = new Registrator()
+			.import<'a', number>()
+			.export('a')
+
+		const mod = new Registrator()
+			.module('sub', sub)
+			.import<'b', number>()
+			.link('b', 'sub.a')
+			.resolve('sub.a', d => d.value(5))
+			.build()
+
+		expect(mod.get('b')).toEqual(5)
+		expect(mod.get('sub.a')).toEqual(5)
+	})
+
+	it('should allow to refer to injected value from submodule before instantiated', () => {
+		const sub = new Registrator()
+			.import<'a', number>()
+			.export('a')
+
+		const mod = new Registrator()
+			.module('sub', sub)
+			.register('a', d => d.fn((a: number) => a * 2).inject('sub.a'))
+			.resolve('sub.a', d => d.value(10))
+			.build()
+
+		expect(mod.get('a')).toEqual(20)
+		type ARGS = Parameters<typeof mod['get']>[0]
+		// FIXME: test here.
+	})
+
+	it('should allow to link 2 submodules together', () => {
+		const sub1 = new Registrator()
+			.import<'ex1', number>()
+		const sub2 = new Registrator()
+			.import<'ex2', number>()
+		
+		const mod = new Registrator()
+			.module('s1', sub1)
+			.module('s2', sub2)
+			.link('s1.ex1', 's2.ex2') // FIXME: this should work
+	})
+
+	it('should resolve exports only to same Async level', async () => {
+		const mod = new Registrator()
+			.import<'a', number>()
+			.import<'asyncA', Promise<number>>()
+			.register('b', 5)
+			.register('asyncB', Promise.resolve(10))
+			.link('a', 'b')
+			.link('asyncA', 'asyncB')
+			.build()
+		expect(mod.get('a')).toEqual(5)
+		expect(await mod.get('asyncA')).toEqual(10)
+		expect(mod.get('b')).toEqual(5)
+		expect(await mod.get('asyncB')).toEqual(10)
+	})
 })
