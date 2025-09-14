@@ -141,6 +141,8 @@ class Module<D extends Deps> {
 
 const INSPECT = Symbol('inspect')
 
+type RemainingDeps<D extends Deps> = keyof D extends never ? [] : [dependencies: D]
+
 export class Registrator<
 	D extends Deps = {},
 	Externals extends keyof D = never,
@@ -298,8 +300,11 @@ export class Registrator<
 		return this as any // FIXME: proper typing here.
 	}
 
-	build(): Module<Prettify<D>> {
-		return new Module<D>(this.values)
+	build(...deps: RemainingDeps<Pick<D,Externals> & OutsideExternals>): Module<Prettify<D>> {
+		if (deps.length) {
+			this.registerMany(deps[0])
+		}
+		return new Module<D>({...this.values})
 	}
 }
 

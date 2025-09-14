@@ -226,4 +226,19 @@ describe('Dity', () => {
 		expect(mod.get('b')).toEqual(5)
 		expect(await mod.get('asyncB')).toEqual(10)
 	})
+
+	it('should allow to resolve dependencies in build call', () => {
+		const mod = new Registrator()
+			.import<'a', number>()
+			.register('b', d => d.fn((a: number) => a * 2).inject('a'))
+
+		const a = mod.build({ a: 5 })
+		expect(a.get('a')).toEqual(5)
+		expect(a.get('b')).toEqual(10)
+
+		const b= mod.build({ a: 10 })
+		expect(b.get('a')).toEqual(10)
+		// expect(a.get('b')).toEqual(20)
+		// FIXME: it should instantiate complete copy.
+	})
 })
