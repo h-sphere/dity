@@ -241,4 +241,20 @@ describe('Dity', () => {
 		// expect(a.get('b')).toEqual(20)
 		// FIXME: it should instantiate complete copy.
 	})
+
+	it('should properly resolve dependencies', () => {
+		const ext = new Registrator()
+			.import<'a', number>()
+			.export('a')
+		
+		const mod = new Registrator()
+			.module('mod', ext)
+			.register('v', 5)
+			.register('fn', d => d.fn((a: number, b: number) => a + b).inject('mod.a', 'v'))
+			.register('fn2', d => d.fn((a: number, b: number) => a + b).inject('fn', 'mod.a'))
+			.resolve('mod.a', d => d.value(100))
+			.build()
+
+		expect(mod.get('fn2')).toEqual(205)
+	})
 })

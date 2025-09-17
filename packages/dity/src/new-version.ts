@@ -129,8 +129,16 @@ class DepConfigurator<D extends Deps> {
 }
 
 class Module<D extends Deps> {
-	constructor(private values: DepOrRetFn<D>) {}
+	constructor(private values: DepOrRetFn<D>, private config?: Config) {}
+
+	private log(...args: any[]) {
+		if (this.config?.logger) {
+			this.config.logger(...args)
+		}
+	}
+
 	get<K extends keyof D>(k: K): D[K] {
+		this.log('GET', k, this.values[k])
 		const v = this.values[k]
 		if (isRetFn(v)) {
 			return v.fn(this as any) // FIXME: do not use as any
@@ -143,6 +151,10 @@ const INSPECT = Symbol('inspect')
 
 type RemainingDeps<D extends Deps> = keyof D extends never ? [] : [dependencies: D]
 
+interface Config {
+	logger?: typeof console.log
+}
+
 export class Registrator<
 	D extends Deps = {},
 	Externals extends keyof D = never,
@@ -150,6 +162,7 @@ export class Registrator<
 	OutsideExternals extends Deps = {}
 > {
 	private values: DepOrRetFn<D> = {} as any; // FIXME: better typing here?
+	constructor(private config?: Config) {}
 
 	[INSPECT]() {
 		return Object.entries(this.values).map(([key, v]) => {
@@ -304,7 +317,7 @@ export class Registrator<
 		if (deps.length) {
 			this.registerMany(deps[0])
 		}
-		return new Module<D>({...this.values})
+		return new Module<D>({...this.values}, this.config)
 	}
 }
 
