@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.1.2
+
+### Patch Changes
+
+- 2a7b489: added ability to log gets
+
 ## 0.1.1
 
 ### Patch Changes
