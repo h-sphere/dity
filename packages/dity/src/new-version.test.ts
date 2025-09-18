@@ -257,4 +257,33 @@ describe('Dity', () => {
 
 		expect(mod.get('fn2')).toEqual(205)
 	})
+
+	it('should properly resolve async deps', async () => {
+		const ex = new Registrator()
+			.import<'a', number>()
+			.import<'b', Promise<number>>()
+			.export('a', 'b')
+		const mod = new Registrator()
+			.module('mod', ex)
+			.register('c', d => d.fn((a: number, b: number) => a + b).inject('mod.a', 'mod.b'))
+			.resolve('mod.a', d => d.value(5))
+			.resolve('mod.b', d => d.value(Promise.resolve(10)))
+			.build()
+		expect(mod.get('c')).toBeInstanceOf(Promise)
+		expect(await mod.get('c')).toEqual(15)
+	})
+
+	it('should properly resolve deps', () => {
+		const mod = new Registrator()
+			.import<'a', number>()
+			.register('fn', d => d.fn((a: number) => 5 + a).inject('a'))
+			.export('fn')
+
+		const main = new Registrator()
+			.module('ex', mod)
+			.register('val', 5)
+			.link('ex.a', 'val')
+			.build()
+		expect(main.get('ex.fn')).toEqual(10)
+	})
 })

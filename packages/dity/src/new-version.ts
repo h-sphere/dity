@@ -66,9 +66,7 @@ class Inj<D extends Deps, Arr extends Array<any>, Ret> {
 		...args: Keys
 	): RetFn<WrapInPromiseIfNeeded<Ret, Values<D, Keys>>> {
 		let v: Ret | null = null
-
 		const savedFn = this.fn
-
 		function fn(this: RetFn<any>, d: Module<D>) {
 			if (v) {
 				return v
@@ -302,7 +300,9 @@ export class Registrator<
 		const entries = Object.entries(mod.values).map(([key, val]) => {
 			const k = `${name}.${key}`
 			if (isRetFn(val)) {
-				return [k, { ...val, args: val.args.map(a => `${name}.${a}`) }]
+				// Mutating for now. maybe in the future it would be better not to mutate it?
+				val.args = val.args.map(a => `${name}.${a}`)
+				return [k, val]
 			} else {
 				return [k, val]
 			}
