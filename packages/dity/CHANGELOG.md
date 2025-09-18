@@ -1,5 +1,11 @@
 # @hypersphere/dity
 
+## 0.1.3
+
+### Patch Changes
+
+- 792d3a9: fixing issue with submodules dependency resolution
+
 ## 0.1.2
 
 ### Patch Changes

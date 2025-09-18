@@ -1,5 +1,12 @@
 # docs
 
+## 1.0.11
+
+### Patch Changes
+
+- Updated dependencies [792d3a9]
+  - @hypersphere/dity@0.1.3
+
 ## 1.0.10
 
 ### Patch Changes

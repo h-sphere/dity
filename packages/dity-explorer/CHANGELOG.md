@@ -1,5 +1,13 @@
 # @hypersphere/dity-explorer
 
+## 1.0.11
+
+### Patch Changes
+
+- Updated dependencies [792d3a9]
+  - @hypersphere/dity@0.1.3
+  - @hypersphere/dity-graph@0.0.14
+
 ## 1.0.10
 
 ### Patch Changes

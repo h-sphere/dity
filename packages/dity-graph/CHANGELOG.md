@@ -1,5 +1,12 @@
 # @hypersphere/dity-graph
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies [792d3a9]
+  - @hypersphere/dity@0.1.3
+
 ## 0.0.13
 
 ### Patch Changes
