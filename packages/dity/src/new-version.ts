@@ -75,7 +75,10 @@ class Inj<D extends Deps, Arr extends Array<any>, Ret> {
 			const res = this.args.map(a => d.get(a))
 			const anyPromise = res.find(f => (f as any) instanceof Promise)
 			if (anyPromise) {
-				return Promise.all(res).then(vals => savedFn(...(vals as any)))
+				v = Promise.all(res).then(vals => {
+					return savedFn(...(vals as any))
+				}) as Ret
+				return v
 			} else {
 				v = savedFn(...(res as Arr))
 				return v

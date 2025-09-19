@@ -286,4 +286,59 @@ describe('Dity', () => {
 			.build()
 		expect(main.get('ex.fn')).toEqual(10)
 	})
+
+	it('should properly cache value of fn() even when linked from other places - sync', () => {
+		const fn = jest.fn(() => 5)
+		const ex = new Registrator()
+			.register('fn', d => d.fn(fn).inject())
+			.export('fn')
+
+		const mod = new Registrator()
+			.module('ex', ex)
+			.register('a', d => d.fn((a: number) => 2 * a).inject('ex.fn'))
+			.import<'aaa', number>()
+			.import<'bbb', number>()
+			.link('aaa', 'ex.fn')
+			.link('bbb', 'a')
+			.build()
+
+		expect(fn).not.toHaveBeenCalled()
+
+		expect(mod.get('bbb')).toEqual(10)
+		expect(fn).toHaveBeenCalledTimes(1)
+		mod.get('ex.fn')
+		expect(fn).toHaveBeenCalledTimes(1)
+
+		mod.get('bbb')
+		expect(fn).toHaveBeenCalledTimes(1)
+
+		mod.get('aaa')
+		expect(fn).toHaveBeenCalledTimes(1)
+	})
+
+	it('should properly cache value of fn() when it is being requested async', async () => {
+		const delay = (n: number) => new Promise(resolve => setTimeout(resolve, n))
+		const fn = jest.fn(async (a: number, b: number) => { await delay(200); return Promise.resolve(a + b)})
+		const mod = new Registrator()
+			.register('x', d => d.fn(async () => { await delay(100); return 40}).inject())
+			.register('y', d => d.fn(async () => { await delay(100); return 60 }).inject())
+			.register('a', d => d.fn(fn).inject('x', 'y'))
+			.register('b', 10)
+			.import<'iA', Promise<number>>()
+			.register('c', d => d.fn((a: number, b: number) => a + b).inject('a', 'b'))
+			.register('d', d => d.fn((a: number, b: number) => a + b).inject('c', 'iA'))
+			.register('e', d => d.fn((a: number, b: number) => a + b).inject('d', 'c'))
+			.register('f', d => d.fn((a: number, b: number) => a + b).inject('e', 'iA'))
+			.link('iA', 'c')
+			.build()
+		
+		expect(fn).not.toHaveBeenCalled()
+
+		const promises = Promise.all([mod.get('f'), mod.get('f'), mod.get('iA')])
+		await delay(100)
+		await promises
+
+		expect(await mod.get('f')).toEqual(440)
+		expect(fn).toHaveBeenCalledTimes(1)
+	})
 })
