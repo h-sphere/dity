@@ -1,6 +1,6 @@
 {
 	"name": "@hypersphere/dity-graph",
-	"version": "0.0.14",
+	"version": "0.0.15",
 	"description": "Interactive dependency graph visualization for the Dity dependency injection library",
 	"type": "module",
 	"main": "dist/dity.es.js",
