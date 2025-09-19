@@ -1,6 +1,6 @@
 {
 	"name": "@hypersphere/dity",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "Type-safe dependency injection library for TypeScript with full compile-time validation and zero runtime overhead",
 	"type": "module",
 	"main": "dist/dity.es.js",
